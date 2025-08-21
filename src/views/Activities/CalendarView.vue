@@ -237,7 +237,7 @@ const groupedEvents = computed(() => {
         </div>
 
         <div class="col-lg-4">
-          <div class="card p-3">
+          <div class="card p-3 mb-3">
             <h6>當日活動</h6>
             <div v-if="selectedDay">
               <div class="mb-2">
@@ -283,8 +283,9 @@ const groupedEvents = computed(() => {
             <div v-else class="text-muted">
               尚未選擇日期，或選擇日期沒有活動。
             </div>
+          </div>
 
-            <hr class="my-3" />
+          <div class="card p-3">
             <h6 class="mb-2">近期活動</h6>
             <div class="event-list overflow-auto" style="max-height: 60vh">
               <div v-for="group in groupedEvents" :key="group.date" class="mb-3">
