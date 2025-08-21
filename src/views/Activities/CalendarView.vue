@@ -8,6 +8,7 @@ import MaterialButton from "@/components/MaterialButton.vue";
 // sample events
 const events = ref([
     { id: 1, date: "2025-09-03", title: "迎新茶會", time: "14:00", location: "活動中心", description: "迎新與學長姐交流", tag: "社交" },
+    { id: 1, date: "2025-09-03", title: "迎新茶會", time: "15:00", location: "活動中心", description: "迎新與學長姐交流", tag: "社交" },
     { id: 2, date: "2025-09-10", title: "系學會例會", time: "18:30", location: "403教室", description: "本月例行會議", tag: "會議" },
     { id: 3, date: "2025-09-18", title: "志工說明會", time: "16:00", location: "多功能教室", description: "招募下學期志工", tag: "招募" },
     { id: 4, date: "2025-10-01", title: "月初籌備會", time: "12:00", location: "辦公室", description: "活動分工", tag: "內務" },
@@ -112,14 +113,14 @@ const groupedEvents = computed(() => {
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
-                                <h5 class="mb-0 text-capitalize">{{ formatMonthYear(current) }}</h5>
                                 <small class="text-muted">點選日期以查看當日活動</small>
                             </div>
-                            <div class="d-flex gap-2">
-                                <MaterialButton variant="outline" color="white" size="sm" @click="prevMonth">上個月
-                                </MaterialButton>
-                                <MaterialButton variant="contained" color="white" size="sm" @click="nextMonth">下個月
-                                </MaterialButton>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-dark me-2" @click="prevMonth"
+                                    aria-label="上個月">‹</button>
+                                <h5 class="mb-0 text-capitalize mx-2">{{ formatMonthYear(current) }}</h5>
+                                <button class="btn btn-sm btn-outline-dark ms-2" @click="nextMonth"
+                                    aria-label="下個月">›</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -150,7 +151,7 @@ const groupedEvents = computed(() => {
                                                         <div v-for="ev in eventsForDate(day)" :key="ev.id"
                                                             class="event-item">
                                                             <span class="badge bg-gradient-info event-time">{{ ev.time
-                                                                }}</span>
+                                                            }}</span>
                                                             <a href="#" @click.prevent="openDay(day)"
                                                                 class="ms-1 event-title">{{ ev.title }}</a>
                                                         </div>
@@ -199,7 +200,7 @@ const groupedEvents = computed(() => {
 
                         <hr class="my-3" />
                         <h6 class="mb-2">活動清單</h6>
-                        <div class="event-list overflow-auto" style="max-height:40vh;">
+                        <div class="event-list overflow-auto" style="max-height:60vh;">
                             <div v-for="group in groupedEvents" :key="group.date" class="mb-3">
                                 <div class="fw-bold small mb-1">{{ group.date }}</div>
                                 <ul class="list-unstyled mb-0">
@@ -258,10 +259,6 @@ const groupedEvents = computed(() => {
     overflow: hidden;
 }
 
-.cell-content .overflow-auto {
-    max-height: 60%;
-}
-
 /* small screens: reduce cell padding */
 @media (max-width: 576px) {
     .cell-content {
@@ -280,23 +277,30 @@ const groupedEvents = computed(() => {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     /* smaller font */
-    line-height: 1.1;
+    line-height: 1.05;
 }
 
 .event-time {
     flex: 0 0 auto;
-    font-size: 0.72rem;
+    font-size: 0.64rem;
+    padding: 0.12rem 0.24rem;
 }
 
+/* title: allow wrap and clamp to 2 lines with ellipsis */
 .event-title {
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    /* max 2 lines */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
+    /* standard property for compatibility */
+    line-clamp: 2;
+}
+
+.event-list .fw-bold {
+    font-size: 0.95rem;
 }
 </style>
