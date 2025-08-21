@@ -60,12 +60,14 @@ const today = new Date();
 const current = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 // default select today (date-only)
 // default to today, but on mobile we don't want to auto-open the day drawer
-const selectedDay = ref(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+const selectedDay = ref(
+  new Date(today.getFullYear(), today.getMonth(), today.getDate())
+);
 
 onMounted(() => {
   try {
     // treat width < 992px as mobile (matches the CSS media query breakpoint)
-    const mq = window.matchMedia('(max-width: 992px)');
+    const mq = window.matchMedia("(max-width: 992px)");
     if (mq && mq.matches) {
       // on mobile, don't auto-open today's drawer
       selectedDay.value = null;
@@ -141,11 +143,16 @@ function openDay(d) {
 // helper: parse an event's date + time into a Date object
 function eventDateTime(ev) {
   // ev.date expected as YYYY-MM-DD
-  const parts = (ev && ev.date) ? ev.date.split("-").map((p) => parseInt(p, 10)) : [];
+  const parts =
+    ev && ev.date ? ev.date.split("-").map((p) => parseInt(p, 10)) : [];
   if (parts.length < 3) return null;
-  let hh = 0, mm = 0, ss = 0;
+  let hh = 0,
+    mm = 0,
+    ss = 0;
   if (ev && ev.time) {
-    const tparts = String(ev.time).split(":").map((p) => parseInt(p, 10));
+    const tparts = String(ev.time)
+      .split(":")
+      .map((p) => parseInt(p, 10));
     if (!isNaN(tparts[0])) hh = tparts[0];
     if (!isNaN(tparts[1])) mm = tparts[1];
     if (!isNaN(tparts[2])) ss = tparts[2];
@@ -175,7 +182,10 @@ const groupedEvents = computed(() => {
     if (!map.has(ev.date)) map.set(ev.date, []);
     map.get(ev.date).push(ev);
   });
-  return Array.from(map.entries()).map(([date, evs]) => ({ date, events: evs }));
+  return Array.from(map.entries()).map(([date, evs]) => ({
+    date,
+    events: evs,
+  }));
 });
 
 // the next upcoming single event (earliest datetime >= now)
@@ -216,6 +226,25 @@ const nextUpcoming = computed(() => {
     </div>
 
     <div class="container mt-4">
+      <!-- desktop-only: show next upcoming event summary beside the calendar header -->
+      <div class="next-upcoming d-none d-lg-block mb-3">
+        <div v-if="nextUpcoming" class="p-2 border border-1 border-success rounded bg-light">
+          <div class="fw-bold">下一場活動</div>
+          <div class="mt-1">
+            <template v-if="nextUpcoming.url">
+              <a :href="nextUpcoming.url" target="_blank" rel="noopener" class="link-like text-success text-2xl">{{
+                nextUpcoming.title }}</a>
+            </template>
+            <template v-else>
+              <a href="#" @click.prevent="openDay(nextUpcoming.date)" class="text-reset">{{ nextUpcoming.title }}</a>
+            </template>
+          </div>
+          <div class="small text-muted">
+            {{ nextUpcoming.date }} · {{ nextUpcoming.time }} ·
+            {{ nextUpcoming.location }}
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-lg-8 order-2 order-lg-1">
           <div class="card p-3">
@@ -238,24 +267,6 @@ const nextUpcoming = computed(() => {
               <div style="width: 1px"></div>
             </div>
             <div class="table-responsive">
-              <!-- desktop-only: show next upcoming event summary beside the calendar header -->
-              <div class="next-upcoming d-none d-lg-block mb-3">
-                <div v-if="nextUpcoming" class="p-2 border rounded bg-light">
-                  <div class="fw-bold">下一場活動</div>
-                  <div class="small text-muted">{{ nextUpcoming.date }} · {{ nextUpcoming.time }} · {{
-                    nextUpcoming.location }}</div>
-                  <div class="mt-1">
-                    <template v-if="nextUpcoming.url">
-                      <a :href="nextUpcoming.url" target="_blank" rel="noopener" class="link-like text-success">{{
-                        nextUpcoming.title }}</a>
-                    </template>
-                    <template v-else>
-                      <a href="#" @click.prevent="openDay(nextUpcoming.date)" class="text-reset">{{ nextUpcoming.title
-                      }}</a>
-                    </template>
-                  </div>
-                </div>
-              </div>
               <table class="table table-bordered mb-0 table-fixed">
                 <thead>
                   <tr class="text-center">
@@ -270,9 +281,14 @@ const nextUpcoming = computed(() => {
                 </thead>
                 <tbody>
                   <tr v-for="(week, wi) in weeks" :key="wi">
-                    <td v-for="(day, di) in week" :key="di"
-                      :class="[{ 'bg-light': !day }, selectedDay && day && isoDate(day) === isoDate(selectedDay) ? 'selected-day' : '']"
-                      class="p-0 align-top">
+                    <td v-for="(day, di) in week" :key="di" :class="[
+                      { 'bg-light': !day },
+                      selectedDay &&
+                        day &&
+                        isoDate(day) === isoDate(selectedDay)
+                        ? 'selected-day'
+                        : '',
+                    ]" class="p-0 align-top">
                       <div class="cell-inner">
                         <div v-if="day" class="cell-content p-2 d-flex flex-column clickable" @click="openDay(day)">
                           <div class="d-flex justify-content-between align-items-start">
@@ -290,8 +306,7 @@ const nextUpcoming = computed(() => {
                               }}</span>
                               <template v-if="ev.url">
                                 <a :href="ev.url" target="_blank" rel="noopener"
-                                  class="ms-1 event-title text-success link-like" @click.stop>{{
-                                    ev.title }}</a>
+                                  class="ms-1 event-title text-success link-like" @click.stop>{{ ev.title }}</a>
                               </template>
                               <template v-else>
                                 <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title
@@ -399,14 +414,26 @@ const nextUpcoming = computed(() => {
       <div class="mobile-day-drawer" v-show="selectedDay">
         <div class="drawer-header d-flex justify-content-between align-items-center p-3">
           <div>
-            <strong>{{ selectedDay ? (selectedDay.getFullYear() + '-' + String(selectedDay.getMonth() + 1).padStart(2,
-              '0')
-              + '-' + String(selectedDay.getDate()).padStart(2, '0')) : '' }}</strong>
-            <div class="text-muted small">{{ selectedDay ? selectedDay.toLocaleDateString('zh-TW', { weekday: 'long' })
-              : ''
-            }}</div>
+            <strong>{{
+              selectedDay
+                ? selectedDay.getFullYear() +
+                "-" +
+                String(selectedDay.getMonth() + 1).padStart(2, "0") +
+                "-" +
+                String(selectedDay.getDate()).padStart(2, "0")
+                : ""
+            }}</strong>
+            <div class="text-muted small">
+              {{
+                selectedDay
+                  ? selectedDay.toLocaleDateString("zh-TW", { weekday: "long" })
+                  : ""
+              }}
+            </div>
           </div>
-          <button class="btn btn-sm btn-link text-dark" @click="selectedDay = null">關閉</button>
+          <button class="btn btn-sm btn-link text-dark" @click="selectedDay = null">
+            關閉
+          </button>
         </div>
         <div class="drawer-body p-3">
           <div v-if="selectedDay">
@@ -419,10 +446,14 @@ const nextUpcoming = computed(() => {
                   <a href="#" @click.prevent="openDay(ev.date)" class="text-reset">{{ ev.title }}</a>
                 </template>
               </div>
-              <div class="text-sm text-muted">{{ ev.time }} • {{ ev.location }}</div>
+              <div class="text-sm text-muted">
+                {{ ev.time }} • {{ ev.location }}
+              </div>
               <div class="text-sm mt-1">{{ ev.description }}</div>
             </div>
-            <div v-if="eventsForDate(selectedDay).length === 0" class="text-muted">無活動</div>
+            <div v-if="eventsForDate(selectedDay).length === 0" class="text-muted">
+              無活動
+            </div>
           </div>
         </div>
       </div>
@@ -522,7 +553,8 @@ const nextUpcoming = computed(() => {
 
 /* make buttons change color on hover (don't require pressing) */
 .btn {
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 /* specific for outline dark buttons used in this view */
