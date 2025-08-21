@@ -238,7 +238,7 @@ const nextUpcoming = computed(() => {
       <!-- desktop-only: show next upcoming event summary beside the calendar header -->
       <div class="next-upcoming d-none d-lg-block mb-3">
         <div v-if="nextUpcoming" class="p-2 border border-1 border-success rounded bg-light">
-          <div class="fw-bold">下一場活動</div>
+          <div class="fw-bold">即將到來</div>
           <div class="mt-1">
             <template v-if="nextUpcoming.url">
               <a :href="nextUpcoming.url" target="_blank" rel="noopener" class="link-like text-success text-2xl">{{
