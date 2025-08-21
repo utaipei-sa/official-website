@@ -3,36 +3,77 @@ import { ref, computed } from "vue";
 
 import NavbarDefault from "../../examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../examples/footers/FooterDefault.vue";
-import MaterialButton from "@/components/MaterialButton.vue";
+// MaterialButton not used in this view
 
 // sample events
 const events = ref([
-  { id: 1, date: "2025-09-03", title: "迎新茶會", time: "14:00", location: "活動中心", description: "迎新與學長姐交流", tag: "社交" },
-  { id: 1, date: "2025-09-03", title: "迎新晚會", time: "17:00", location: "活動中心", description: "迎新與學長姐交流", tag: "社交" },
-  { id: 2, date: "2025-09-10", title: "系學會例會", time: "18:30", location: "403教室", description: "本月例行會議", tag: "會議" },
-  { id: 3, date: "2025-09-18", title: "志工說明會", time: "16:00", location: "多功能教室", description: "招募下學期志工", tag: "招募" },
-  { id: 4, date: "2025-10-01", title: "月初籌備會", time: "12:00", location: "辦公室", description: "活動分工", tag: "內務" },
+  {
+    id: 1,
+    date: "2025-08-03",
+    title: "迎新茶會",
+    time: "14:00",
+    location: "活動中心",
+    description: "迎新與學長姐交流",
+    tag: "社交",
+  },
+  {
+    id: 1,
+    date: "2025-09-03",
+    title: "迎新晚會",
+    time: "17:00",
+    location: "活動中心",
+    description: "迎新與學長姐交流",
+    tag: "社交",
+  },
+  {
+    id: 2,
+    date: "2025-09-10",
+    title: "系學會例會",
+    time: "18:30",
+    location: "403教室",
+    description: "本月例行會議",
+    tag: "會議",
+  },
+  {
+    id: 3,
+    date: "2025-09-18",
+    title: "志工說明會",
+    time: "16:00",
+    location: "多功能教室",
+    description: "招募下學期志工",
+    tag: "招募",
+  },
+  {
+    id: 4,
+    date: "2025-10-01",
+    title: "月初籌備會",
+    time: "12:00",
+    location: "辦公室",
+    description: "活動分工",
+    tag: "內務",
+  },
 ]);
 
 const today = new Date();
 const current = ref(new Date(today.getFullYear(), today.getMonth(), 1));
-const selectedDay = ref(null);
+// default select today (date-only)
+const selectedDay = ref(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
 
-function formatMonthYear(d) {
-  const dt = d && d.value ? d.value : d;
-  if (!dt) return "";
-  try {
-    return dt.toLocaleString("zh-TW", { year: "numeric", month: "long" });
-  } catch (e) {
-    return "";
-  }
-}
+// formatMonthYear removed: header now uses separate year/month spans for better alignment
 
 function prevMonth() {
-  current.value = new Date(current.value.getFullYear(), current.value.getMonth() - 1, 1);
+  current.value = new Date(
+    current.value.getFullYear(),
+    current.value.getMonth() - 1,
+    1
+  );
 }
 function nextMonth() {
-  current.value = new Date(current.value.getFullYear(), current.value.getMonth() + 1, 1);
+  current.value = new Date(
+    current.value.getFullYear(),
+    current.value.getMonth() + 1,
+    1
+  );
 }
 
 function startOfMonth(d) {
@@ -57,7 +98,10 @@ const weeks = computed(() => {
 
   const days = [];
   for (let i = 0; i < startWeekDay; i++) days.push(null);
-  for (let d = 1; d <= totalDays; d++) days.push(new Date(current.value.getFullYear(), current.value.getMonth(), d));
+  for (let d = 1; d <= totalDays; d++)
+    days.push(
+      new Date(current.value.getFullYear(), current.value.getMonth(), d)
+    );
   while (days.length % 7 !== 0) days.push(null);
 
   const wk = [];
@@ -79,7 +123,11 @@ function openDay(d) {
 
 // grouped events for vertical list (sorted by date)
 const groupedEvents = computed(() => {
-  const copy = events.value.slice().sort((a, b) => a.date.localeCompare(b.date));
+  const todayKey = isoDate(new Date());
+  const copy = events.value
+    .slice()
+    .filter((ev) => ev.date >= todayKey)
+    .sort((a, b) => a.date.localeCompare(b.date));
   const map = new Map();
   copy.forEach((ev) => {
     if (!map.has(ev.date)) map.set(ev.date, []);
@@ -87,7 +135,6 @@ const groupedEvents = computed(() => {
   });
   return Array.from(map.entries()).map(([date, evs]) => ({ date, events: evs }));
 });
-
 </script>
 
 <template>
@@ -100,7 +147,7 @@ const groupedEvents = computed(() => {
       </div>
     </div>
 
-    <div class="page-header min-vh-25" style="background: linear-gradient(195deg, #6b7a8f, #2b2f3a);">
+    <div class="page-header min-vh-25" style="background: linear-gradient(195deg, #6b7a8f, #2b2f3a)">
       <div class="container py-5 text-white">
         <h2 class="mb-1">學生會 活動行事曆</h2>
         <p class="lead opacity-8">檢視與管理學生會活動</p>
@@ -112,15 +159,22 @@ const groupedEvents = computed(() => {
         <div class="col-lg-8">
           <div class="card p-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <div>
+              <!-- <div>
                 <small class="text-muted">點選日期以查看當日活動</small>
-              </div>
+              </div> -->
               <div class="mx-auto d-flex align-items-center">
-                <button class="btn btn-sm btn-outline-dark me-2" @click="prevMonth" aria-label="上個月">‹</button>
-                <h5 class="mb-0 text-capitalize mx-3 text-center">{{ formatMonthYear(current) }}</h5>
-                <button class="btn btn-sm btn-outline-dark ms-2" @click="nextMonth" aria-label="下個月">›</button>
+                <button class="btn btn-sm btn-outline-dark me-2" @click="prevMonth" aria-label="上個月">
+                  ‹
+                </button>
+                <h5 class="mb-0 text-capitalize mx-3 text-center month-year">
+                  <span class="month-year-year">{{ current.getFullYear() }}年</span>
+                  <span class="month-year-month"><span class="month-num">{{ current.getMonth() + 1 }}</span>月</span>
+                </h5>
+                <button class="btn btn-sm btn-outline-dark ms-2" @click="nextMonth" aria-label="下個月">
+                  ›
+                </button>
               </div>
-              <div style="width:1px"></div>
+              <div style="width: 1px"></div>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered mb-0 table-fixed">
@@ -137,17 +191,23 @@ const groupedEvents = computed(() => {
                 </thead>
                 <tbody>
                   <tr v-for="(week, wi) in weeks" :key="wi">
-                    <td v-for="(day, di) in week" :key="di" :class="{ 'bg-light': !day }" class="p-0 align-top">
+                    <td v-for="(day, di) in week" :key="di"
+                      :class="[{ 'bg-light': !day }, selectedDay && day && isoDate(day) === isoDate(selectedDay) ? 'selected-day' : '']"
+                      class="p-0 align-top">
                       <div class="cell-inner">
                         <div v-if="day" class="cell-content p-2 d-flex flex-column">
                           <div class="d-flex justify-content-between align-items-start">
                             <strong>{{ day.getDate() }}</strong>
-                            <small class="text-muted">{{ (new Date()).toDateString() ===
-                              day.toDateString() ? '今天' : '' }}</small>
+                            <small class="text-muted">{{
+                              new Date().toDateString() === day.toDateString()
+                                ? "今天"
+                                : ""
+                            }}</small>
                           </div>
                           <div class="mt-1 event-preview">
                             <div v-for="ev in eventsForDate(day)" :key="ev.id" class="event-item">
-                              <span class="badge bg-gradient-info event-time">{{ ev.time
+                              <span class="badge bg-gradient-info event-time">{{
+                                ev.time
                               }}</span>
                               <a href="#" @click.prevent="openDay(day)" class="ms-1 event-title">{{ ev.title }}</a>
                             </div>
@@ -171,18 +231,26 @@ const groupedEvents = computed(() => {
             <h6>當日活動</h6>
             <div v-if="selectedDay">
               <div class="mb-2">
-                <strong>{{ selectedDay.getFullYear() }}-{{ String(selectedDay.getMonth() +
-                  1).padStart(2, '0') }}-{{ String(selectedDay.getDate()).padStart(2, '0') }}</strong>
-                <div class="text-muted small">{{ selectedDay.toLocaleDateString('zh-TW', {
-                  weekday:
-                    'long'
-                }) }}</div>
+                <strong>{{ selectedDay.getFullYear() }}-{{
+                  String(selectedDay.getMonth() + 1).padStart(2, "0")
+                }}-{{
+                    String(selectedDay.getDate()).padStart(2, "0")
+                  }}</strong>
+                <div class="text-muted small">
+                  {{
+                    selectedDay.toLocaleDateString("zh-TW", {
+                      weekday: "long",
+                    })
+                  }}
+                </div>
               </div>
               <div v-for="ev in eventsForDate(selectedDay)" :key="ev.id" class="mb-3">
                 <div class="d-flex justify-content-between">
                   <div>
                     <div class="fw-bold">{{ ev.title }}</div>
-                    <div class="text-sm text-muted">{{ ev.time }} • {{ ev.location }}</div>
+                    <div class="text-sm text-muted">
+                      {{ ev.time }} • {{ ev.location }}
+                    </div>
                     <div class="text-sm mt-1">{{ ev.description }}</div>
                   </div>
                   <div>
@@ -190,13 +258,17 @@ const groupedEvents = computed(() => {
                   </div>
                 </div>
               </div>
-              <div v-if="eventsForDate(selectedDay).length === 0" class="text-muted">今日無活動</div>
+              <div v-if="eventsForDate(selectedDay).length === 0" class="text-muted">
+                今日無活動
+              </div>
             </div>
-            <div v-else class="text-muted">尚未選擇日期，或選擇日期沒有活動。</div>
+            <div v-else class="text-muted">
+              尚未選擇日期，或選擇日期沒有活動。
+            </div>
 
             <hr class="my-3" />
-            <h6 class="mb-2">活動清單</h6>
-            <div class="event-list overflow-auto" style="max-height:60vh;">
+            <h6 class="mb-2">近期活動</h6>
+            <div class="event-list overflow-auto" style="max-height: 60vh">
               <div v-for="group in groupedEvents" :key="group.date" class="mb-3">
                 <div class="fw-bold small mb-1">{{ group.date }}</div>
                 <ul class="list-unstyled mb-0">
@@ -204,7 +276,9 @@ const groupedEvents = computed(() => {
                     class="d-flex justify-content-between align-items-start py-1 border-bottom">
                     <div>
                       <div class="fw-bold">{{ ev.title }}</div>
-                      <div class="text-sm text-muted">{{ ev.time }} • {{ ev.location }}</div>
+                      <div class="text-sm text-muted">
+                        {{ ev.time }} • {{ ev.location }}
+                      </div>
                     </div>
                     <span class="badge bg-gradient-primary">{{ ev.tag }}</span>
                   </li>
@@ -213,7 +287,6 @@ const groupedEvents = computed(() => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -302,5 +375,51 @@ const groupedEvents = computed(() => {
 
 .event-list .fw-bold {
   font-size: 0.95rem;
+}
+
+/* make buttons change color on hover (don't require pressing) */
+.btn {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+/* specific for outline dark buttons used in this view */
+.btn-outline-dark:hover {
+  background-color: rgba(43, 47, 58, 0.08);
+  color: #2b2f3a;
+  border-color: rgba(43, 47, 58, 0.2);
+}
+
+.btn-outline-dark:focus,
+.btn-outline-dark:active {
+  /* keep a consistent style when focused/active */
+  background-color: rgba(43, 47, 58, 0.12);
+  color: #2b2f3a;
+  border-color: rgba(43, 47, 58, 0.25);
+}
+
+/* month-year header alignment: ensure 1-digit and 2-digit months don't shift layout */
+.month-year {
+  display: inline-block;
+  min-width: 9ch;
+  /* reserve enough width so single/two-digit months don't shift centering */
+  text-align: center;
+}
+
+.month-year-month {
+  text-align: right;
+}
+
+.month-num {
+  display: inline-block;
+  width: 2ch;
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* selected day highlight */
+.selected-day .cell-content {
+  background-color: rgba(99, 150, 255, 0.12);
+  border-left: 3px solid rgba(66, 133, 244, 0.9);
 }
 </style>
