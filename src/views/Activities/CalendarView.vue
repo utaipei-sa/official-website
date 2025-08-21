@@ -195,10 +195,10 @@ const groupedEvents = computed(() => {
                       :class="[{ 'bg-light': !day }, selectedDay && day && isoDate(day) === isoDate(selectedDay) ? 'selected-day' : '']"
                       class="p-0 align-top">
                       <div class="cell-inner">
-                        <div v-if="day" class="cell-content p-2 d-flex flex-column">
+                        <div v-if="day" class="cell-content p-2 d-flex flex-column clickable" @click="openDay(day)">
                           <div class="d-flex justify-content-between align-items-start">
                             <strong>{{ day.getDate() }}</strong>
-                            <small class="text-muted">{{
+                            <small class="today-label text-success">{{
                               new Date().toDateString() === day.toDateString()
                                 ? "今天"
                                 : ""
@@ -209,11 +209,11 @@ const groupedEvents = computed(() => {
                               <span class="badge bg-gradient-info event-time">{{
                                 ev.time
                               }}</span>
-                              <a href="#" @click.prevent="openDay(day)" class="ms-1 event-title">{{ ev.title }}</a>
+                              <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title }}</a>
                             </div>
                           </div>
                           <div class="mt-auto text-end">
-                            <a href="#" @click.prevent="openDay(day)" class="text-sm">查看</a>
+                            <!-- '查看' link removed; entire cell is clickable -->
                           </div>
                         </div>
                         <div v-else class="cell-content p-2"></div>
@@ -259,7 +259,7 @@ const groupedEvents = computed(() => {
                 </div>
               </div>
               <div v-if="eventsForDate(selectedDay).length === 0" class="text-muted">
-                今日無活動
+                無活動
               </div>
             </div>
             <div v-else class="text-muted">
@@ -421,5 +421,14 @@ const groupedEvents = computed(() => {
 .selected-day .cell-content {
   background-color: rgba(99, 150, 255, 0.12);
   border-left: 3px solid rgba(66, 133, 244, 0.9);
+}
+
+/* clickable cell style */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover .cell-content {
+  background-color: rgba(0, 0, 0, 0.03);
 }
 </style>
