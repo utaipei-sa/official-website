@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 import NavbarDefault from "../../examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../examples/footers/FooterDefault.vue";
@@ -59,7 +59,21 @@ const events = ref([
 const today = new Date();
 const current = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 // default select today (date-only)
+// default to today, but on mobile we don't want to auto-open the day drawer
 const selectedDay = ref(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+
+onMounted(() => {
+  try {
+    // treat width < 992px as mobile (matches the CSS media query breakpoint)
+    const mq = window.matchMedia('(max-width: 992px)');
+    if (mq && mq.matches) {
+      // on mobile, don't auto-open today's drawer
+      selectedDay.value = null;
+    }
+  } catch (e) {
+    // ignore (e.g., during SSR or test env without window)
+  }
+});
 
 // formatMonthYear removed: header now uses separate year/month spans for better alignment
 
@@ -285,9 +299,9 @@ const groupedEvents = computed(() => {
             </div>
           </div>
 
-          <div class="card p-3">
+          <div class="card p-3 mb-2">
             <h6 class="mb-2">近期活動</h6>
-            <div class="event-list overflow-auto" style="max-height: 60vh">
+            <div class="event-list overflow-auto">
               <div v-for="group in groupedEvents" :key="group.date" class="mb-3">
                 <div class="fw-bold small mb-1">{{ group.date }}</div>
                 <ul class="list-unstyled mb-0">
@@ -327,7 +341,7 @@ const groupedEvents = computed(() => {
               + '-' + String(selectedDay.getDate()).padStart(2, '0')) : '' }}</strong>
             <div class="text-muted small">{{ selectedDay ? selectedDay.toLocaleDateString('zh-TW', { weekday: 'long' })
               : ''
-              }}</div>
+            }}</div>
           </div>
           <button class="btn btn-sm btn-link text-dark" @click="selectedDay = null">關閉</button>
         </div>
@@ -433,6 +447,10 @@ const groupedEvents = computed(() => {
   white-space: normal;
   /* standard property for compatibility */
   line-clamp: 2;
+}
+
+.event-list {
+  max-height: 60vh;
 }
 
 .event-list .fw-bold {
@@ -544,6 +562,11 @@ const groupedEvents = computed(() => {
 
   .mobile-drawer-backdrop {
     display: block;
+  }
+
+  /* make recent events list taller on mobile so more items are visible before scrolling */
+  .event-list {
+    max-height: 85vh !important;
   }
 }
 
