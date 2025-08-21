@@ -138,18 +138,63 @@ function openDay(d) {
 }
 
 // grouped events for vertical list (sorted by date)
+// helper: parse an event's date + time into a Date object
+function eventDateTime(ev) {
+  // ev.date expected as YYYY-MM-DD
+  const parts = (ev && ev.date) ? ev.date.split("-").map((p) => parseInt(p, 10)) : [];
+  if (parts.length < 3) return null;
+  let hh = 0, mm = 0, ss = 0;
+  if (ev && ev.time) {
+    const tparts = String(ev.time).split(":").map((p) => parseInt(p, 10));
+    if (!isNaN(tparts[0])) hh = tparts[0];
+    if (!isNaN(tparts[1])) mm = tparts[1];
+    if (!isNaN(tparts[2])) ss = tparts[2];
+  }
+  // months are 0-based
+  return new Date(parts[0], parts[1] - 1, parts[2], hh, mm, ss);
+}
+
+// groupedEvents: only include events whose datetime >= now (precision to time)
 const groupedEvents = computed(() => {
-  const todayKey = isoDate(new Date());
+  const now = new Date();
   const copy = events.value
     .slice()
-    .filter((ev) => ev.date >= todayKey)
-    .sort((a, b) => a.date.localeCompare(b.date));
+    .filter((ev) => {
+      const dt = eventDateTime(ev);
+      return dt && dt >= now;
+    })
+    .sort((a, b) => {
+      const da = eventDateTime(a);
+      const db = eventDateTime(b);
+      if (!da) return 1;
+      if (!db) return -1;
+      return da - db;
+    });
   const map = new Map();
   copy.forEach((ev) => {
     if (!map.has(ev.date)) map.set(ev.date, []);
     map.get(ev.date).push(ev);
   });
   return Array.from(map.entries()).map(([date, evs]) => ({ date, events: evs }));
+});
+
+// the next upcoming single event (earliest datetime >= now)
+const nextUpcoming = computed(() => {
+  const now = new Date();
+  const future = events.value
+    .slice()
+    .filter((e) => {
+      const dt = eventDateTime(e);
+      return dt && dt >= now;
+    })
+    .sort((a, b) => {
+      const da = eventDateTime(a);
+      const db = eventDateTime(b);
+      if (!da) return 1;
+      if (!db) return -1;
+      return da - db;
+    });
+  return future.length ? future[0] : null;
 });
 </script>
 
@@ -193,6 +238,24 @@ const groupedEvents = computed(() => {
               <div style="width: 1px"></div>
             </div>
             <div class="table-responsive">
+              <!-- desktop-only: show next upcoming event summary beside the calendar header -->
+              <div class="next-upcoming d-none d-lg-block mb-3">
+                <div v-if="nextUpcoming" class="p-2 border rounded bg-light">
+                  <div class="fw-bold">下一場活動</div>
+                  <div class="small text-muted">{{ nextUpcoming.date }} · {{ nextUpcoming.time }} · {{
+                    nextUpcoming.location }}</div>
+                  <div class="mt-1">
+                    <template v-if="nextUpcoming.url">
+                      <a :href="nextUpcoming.url" target="_blank" rel="noopener" class="link-like text-success">{{
+                        nextUpcoming.title }}</a>
+                    </template>
+                    <template v-else>
+                      <a href="#" @click.prevent="openDay(nextUpcoming.date)" class="text-reset">{{ nextUpcoming.title
+                      }}</a>
+                    </template>
+                  </div>
+                </div>
+              </div>
               <table class="table table-bordered mb-0 table-fixed">
                 <thead>
                   <tr class="text-center">
