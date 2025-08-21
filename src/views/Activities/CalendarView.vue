@@ -438,9 +438,9 @@ const groupedEvents = computed(() => {
 
 .month-num {
   display: inline-block;
-  width: 2ch;
+  min-width: 2ch;
   text-align: right;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+  font-family: inherit;
   font-variant-numeric: tabular-nums;
 }
 
