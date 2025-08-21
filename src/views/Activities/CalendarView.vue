@@ -86,6 +86,48 @@ onMounted(() => {
   }
 });
 
+// month / year quick selector helpers
+const monthNames = [
+  "一月",
+  "二月",
+  "三月",
+  "四月",
+  "五月",
+  "六月",
+  "七月",
+  "八月",
+  "九月",
+  "十月",
+  "十一月",
+  "十二月",
+];
+
+const years = computed(() => {
+  const y = today.getFullYear();
+  const arr = [];
+  // range: current year -5 .. current year +5
+  for (let i = y - 5; i <= y + 5; i++) arr.push(i);
+  return arr;
+});
+
+const selectedMonth = computed({
+  get() {
+    return current.value.getMonth();
+  },
+  set(m) {
+    current.value = new Date(current.value.getFullYear(), Number(m), 1);
+  },
+});
+
+const selectedYear = computed({
+  get() {
+    return current.value.getFullYear();
+  },
+  set(y) {
+    current.value = new Date(Number(y), current.value.getMonth(), 1);
+  },
+});
+
 // formatMonthYear removed: header now uses separate year/month spans for better alignment
 
 function prevMonth() {
@@ -101,6 +143,12 @@ function nextMonth() {
     current.value.getMonth() + 1,
     1
   );
+}
+
+function goToToday() {
+  // jump the calendar to today's month and select today
+  current.value = new Date(today.getFullYear(), today.getMonth(), 1);
+  selectedDay.value = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 }
 
 function startOfMonth(d) {
@@ -265,12 +313,20 @@ const nextUpcoming = computed(() => {
                 <button class="btn btn-sm btn-outline-dark me-2" @click="prevMonth" aria-label="上個月">
                   ‹
                 </button>
-                <h5 class="mb-0 text-capitalize mx-3 text-center month-year">
-                  <span class="month-year-year">{{ current.getFullYear() }}年</span>
-                  <span class="month-year-month"><span class="month-num">{{ current.getMonth() + 1 }}</span>月</span>
-                </h5>
+                <div class="d-flex align-items-center mx-2">
+                  <select class="form-select form-select-sm year-select" v-model="selectedYear" aria-label="選擇年份">
+                    <option v-for="y in years" :key="y" :value="y">{{ y }} 年</option>
+                  </select>
+                  <select class="form-select form-select-sm me-2 month-select" v-model="selectedMonth"
+                    aria-label="選擇月份">
+                    <option v-for="(m, idx) in monthNames" :key="idx" :value="idx">{{ m }}</option>
+                  </select>
+                </div>
                 <button class="btn btn-sm btn-outline-dark ms-2" @click="nextMonth" aria-label="下個月">
                   ›
+                </button>
+                <button class="btn btn-sm btn-outline-success me-2 mx-2" @click="goToToday" aria-label="回到今日">
+                  回到今日
                 </button>
               </div>
               <div style="width: 1px"></div>
@@ -603,6 +659,21 @@ const nextUpcoming = computed(() => {
   text-align: right;
   font-family: inherit;
   font-variant-numeric: tabular-nums;
+}
+
+/* month/year select styling to match header buttons */
+.month-select,
+.year-select {
+  min-width: 90px;
+}
+
+@media (max-width: 576px) {
+
+  .month-select,
+  .year-select {
+    min-width: 64px;
+    font-size: 0.85rem;
+  }
 }
 
 /* selected day highlight */
