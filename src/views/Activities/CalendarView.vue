@@ -15,6 +15,7 @@ const events = ref([
     location: "活動中心",
     description: "迎新與學長姐交流",
     tag: "社交",
+    url: "https://example.com/welcome-tea",
   },
   {
     id: 1,
@@ -24,6 +25,7 @@ const events = ref([
     location: "活動中心",
     description: "迎新與學長姐交流",
     tag: "社交",
+    url: "https://example.com/welcome-party",
   },
   {
     id: 2,
@@ -209,7 +211,14 @@ const groupedEvents = computed(() => {
                               <span class="badge bg-gradient-info event-time">{{
                                 ev.time
                               }}</span>
-                              <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title }}</a>
+                              <template v-if="ev.url">
+                                <a :href="ev.url" target="_blank" rel="noopener" class="ms-1 event-title" @click.stop>{{
+                                  ev.title }}</a>
+                              </template>
+                              <template v-else>
+                                <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title
+                                }}</a>
+                              </template>
                             </div>
                           </div>
                           <div class="mt-auto text-end">
@@ -247,7 +256,14 @@ const groupedEvents = computed(() => {
               <div v-for="ev in eventsForDate(selectedDay)" :key="ev.id" class="mb-3">
                 <div class="d-flex justify-content-between">
                   <div>
-                    <div class="fw-bold">{{ ev.title }}</div>
+                    <div class="fw-bold">
+                      <template v-if="ev.url">
+                        <a :href="ev.url" target="_blank" rel="noopener" class="text-reset">{{ ev.title }}</a>
+                      </template>
+                      <template v-else>
+                        <a href="#" @click.prevent="openDay(ev.date)" class="text-reset">{{ ev.title }}</a>
+                      </template>
+                    </div>
                     <div class="text-sm text-muted">
                       {{ ev.time }} • {{ ev.location }}
                     </div>
@@ -275,7 +291,14 @@ const groupedEvents = computed(() => {
                   <li v-for="ev in group.events" :key="ev.id"
                     class="d-flex justify-content-between align-items-start py-1 border-bottom">
                     <div>
-                      <div class="fw-bold">{{ ev.title }}</div>
+                      <div class="fw-bold">
+                        <template v-if="ev.url">
+                          <a :href="ev.url" target="_blank" rel="noopener" class="text-reset">{{ ev.title }}</a>
+                        </template>
+                        <template v-else>
+                          <a href="#" @click.prevent="openDay(ev.date)" class="text-reset">{{ ev.title }}</a>
+                        </template>
+                      </div>
                       <div class="text-sm text-muted">
                         {{ ev.time }} • {{ ev.location }}
                       </div>
