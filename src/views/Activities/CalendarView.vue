@@ -309,23 +309,22 @@ const nextUpcoming = computed(() => {
               <!-- <div>
                 <small class="text-muted">點選日期以查看當日活動</small>
               </div> -->
-              <div class="mx-auto d-flex align-items-center">
-                <button class="btn btn-sm btn-outline-dark me-2" @click="prevMonth" aria-label="上個月">
+              <div class="mx-auto d-flex align-items-baseline month-year-controls">
+                <button class="btn btn-sm btn-outline-dark control-btn me-2" @click="prevMonth" aria-label="上個月">
                   ‹
                 </button>
-                <div class="d-flex align-items-center mx-2">
-                  <select class="form-select form-select-sm year-select" v-model="selectedYear" aria-label="選擇年份">
+                <div class="d-flex align-items-center mx-2 selectors">
+                  <select class="form-select form-select-sm year-select me-2" v-model="selectedYear" aria-label="選擇年份">
                     <option v-for="y in years" :key="y" :value="y">{{ y }} 年</option>
                   </select>
-                  <select class="form-select form-select-sm me-2 month-select" v-model="selectedMonth"
-                    aria-label="選擇月份">
+                  <select class="form-select form-select-sm month-select" v-model="selectedMonth" aria-label="選擇月份">
                     <option v-for="(m, idx) in monthNames" :key="idx" :value="idx">{{ m }}</option>
                   </select>
                 </div>
-                <button class="btn btn-sm btn-outline-dark ms-2" @click="nextMonth" aria-label="下個月">
+                <button class="btn btn-sm btn-outline-dark control-btn ms-2" @click="nextMonth" aria-label="下個月">
                   ›
                 </button>
-                <button class="btn btn-sm btn-outline-success me-2 mx-2" @click="goToToday" aria-label="回到今日">
+                <button class="btn btn-sm btn-success ms-3" @click="goToToday" aria-label="回到今日">
                   回到今日
                 </button>
               </div>
@@ -665,6 +664,55 @@ const nextUpcoming = computed(() => {
 .month-select,
 .year-select {
   min-width: 90px;
+}
+
+/* controls wrapper: ensure vertical alignment with buttons */
+.month-year-controls {
+  gap: 0.25rem;
+  display: flex;
+}
+
+/* unify button sizes and subtle elevation */
+.control-btn {
+  min-width: 36px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border-radius: 6px;
+}
+
+/* selectors visual polish */
+.selectors .form-select {
+  border-radius: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  /* make selects match button height and vertically center their content */
+  height: 34px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* reduce busy-ness on small screens */
+@media (max-width: 576px) {
+  .selectors .form-select {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 0.85rem;
+  }
+
+  .control-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+  }
 }
 
 @media (max-width: 576px) {
