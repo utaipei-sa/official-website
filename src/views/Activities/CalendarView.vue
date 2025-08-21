@@ -200,7 +200,7 @@ const groupedEvents = computed(() => {
                         <div v-if="day" class="cell-content p-2 d-flex flex-column clickable" @click="openDay(day)">
                           <div class="d-flex justify-content-between align-items-start">
                             <strong>{{ day.getDate() }}</strong>
-                            <small class="today-label text-success">{{
+                            <small class="today-label text-warning">{{
                               new Date().toDateString() === day.toDateString()
                                 ? "今天"
                                 : ""
@@ -212,8 +212,9 @@ const groupedEvents = computed(() => {
                                 ev.time
                               }}</span>
                               <template v-if="ev.url">
-                                <a :href="ev.url" target="_blank" rel="noopener" class="ms-1 event-title" @click.stop>{{
-                                  ev.title }}</a>
+                                <a :href="ev.url" target="_blank" rel="noopener"
+                                  class="ms-1 event-title text-success link-like" @click.stop>{{
+                                    ev.title }}</a>
                               </template>
                               <template v-else>
                                 <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title
@@ -258,7 +259,8 @@ const groupedEvents = computed(() => {
                   <div>
                     <div class="fw-bold">
                       <template v-if="ev.url">
-                        <a :href="ev.url" target="_blank" rel="noopener" class="text-reset">{{ ev.title }}</a>
+                        <a :href="ev.url" target="_blank" rel="noopener" class="text-success link-like">{{ ev.title
+                        }}</a>
                       </template>
                       <template v-else>
                         <a href="#" @click.prevent="openDay(ev.date)" class="text-reset">{{ ev.title }}</a>
@@ -293,7 +295,8 @@ const groupedEvents = computed(() => {
                     <div>
                       <div class="fw-bold">
                         <template v-if="ev.url">
-                          <a :href="ev.url" target="_blank" rel="noopener" class="text-reset">{{ ev.title }}</a>
+                          <a :href="ev.url" target="_blank" rel="noopener" class="text-success link-like">{{ ev.title
+                          }}</a>
                         </template>
                         <template v-else>
                           <a href="#" @click.prevent="openDay(ev.date)" class="text-reset">{{ ev.title }}</a>
@@ -453,5 +456,17 @@ const groupedEvents = computed(() => {
 
 .clickable:hover .cell-content {
   background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* link-like: green by default, red on hover */
+.link-like {
+  color: var(--bs-success, #28a745);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link-like:hover {
+  color: var(--bs-danger, #dc3545);
+  text-decoration: underline;
 }
 </style>
