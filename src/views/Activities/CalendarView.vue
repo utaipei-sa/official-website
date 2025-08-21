@@ -151,8 +151,8 @@ const groupedEvents = computed(() => {
 
     <div class="page-header min-vh-25" style="background: linear-gradient(195deg, #6b7a8f, #2b2f3a)">
       <div class="container py-5 text-white">
-        <h2 class="mb-1">學生會 活動行事曆</h2>
-        <p class="lead opacity-8">檢視與管理學生會活動</p>
+        <h2 class="mb-1 mt-8 text-success">學生會活動行事曆</h2>
+        <p class="lead opacity-8">學生會活動</p>
       </div>
     </div>
 
