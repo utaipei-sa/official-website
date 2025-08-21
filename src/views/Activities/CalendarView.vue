@@ -16,6 +16,15 @@ const events = ref([
     description: "迎新與學長姐交流",
     tag: "社交",
     url: "https://example.com/welcome-tea",
+  }, {
+    id: 1,
+    date: "2025-08-03",
+    title: "迎新茶會",
+    time: "14:00",
+    location: "活動中心",
+    description: "迎新與學長姐交流",
+    tag: "社交",
+    url: "https://example.com/welcome-tea",
   },
   {
     id: 1,
@@ -300,17 +309,20 @@ const nextUpcoming = computed(() => {
                             }}</small>
                           </div>
                           <div class="mt-1 event-preview">
-                            <div v-for="ev in eventsForDate(day)" :key="ev.id" class="event-item">
-                              <span class="badge bg-gradient-info event-time">{{
-                                ev.time
-                              }}</span>
+                            <!-- mobile: single dot if there's any event on this day -->
+                            <span v-if="eventsForDate(day).length" class="event-dot me-2 d-inline-block d-lg-none"
+                              aria-hidden="true"></span>
+                            <!-- desktop: show full event list -->
+                            <div v-for="ev in eventsForDate(day)" :key="ev.id"
+                              class="event-item d-flex align-items-center event-preview-detail">
+                              <span class="badge bg-gradient-info event-time">{{ ev.time }}</span>
                               <template v-if="ev.url">
                                 <a :href="ev.url" target="_blank" rel="noopener"
                                   class="ms-1 event-title text-success link-like" @click.stop>{{ ev.title }}</a>
                               </template>
                               <template v-else>
                                 <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title
-                                }}</a>
+                                  }}</a>
                               </template>
                             </div>
                           </div>
@@ -659,6 +671,24 @@ const nextUpcoming = computed(() => {
     display: block;
   }
 
+  /* show dots and hide detail preview on mobile */
+  .event-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--bs-primary, #0d6efd);
+    border-radius: 50%;
+    display: inline-block !important;
+    flex: 0 0 auto;
+  }
+
+  .event-preview-detail {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+
   /* make recent events list taller on mobile so more items are visible before scrolling */
   .event-list {
     max-height: 85vh !important;
@@ -679,5 +709,17 @@ const nextUpcoming = computed(() => {
 .slide-enter-to,
 .slide-leave-from {
   transform: translateX(0%);
+}
+
+@media (min-width: 992px) {
+
+  /* desktop: hide dot, show detail preview */
+  .event-dot {
+    display: none;
+  }
+
+  .event-preview-detail {
+    display: inline-flex;
+  }
 }
 </style>
