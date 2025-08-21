@@ -158,7 +158,7 @@ const groupedEvents = computed(() => {
 
     <div class="container mt-4">
       <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-8 order-2 order-lg-1">
           <div class="card p-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <!-- <div>
@@ -236,8 +236,8 @@ const groupedEvents = computed(() => {
           </div>
         </div>
 
-        <div class="col-lg-4">
-          <div class="card p-3 mb-3">
+        <div class="col-lg-4 order-1 order-lg-2">
+          <div class="card p-3 mb-3 desktop-day-card">
             <h6>當日活動</h6>
             <div v-if="selectedDay">
               <div class="mb-2">
@@ -316,6 +316,41 @@ const groupedEvents = computed(() => {
         </div>
       </div>
     </div>
+
+    <!-- mobile drawer for selected day (only visible on small screens) -->
+    <transition name="slide">
+      <div class="mobile-day-drawer" v-show="selectedDay">
+        <div class="drawer-header d-flex justify-content-between align-items-center p-3">
+          <div>
+            <strong>{{ selectedDay ? (selectedDay.getFullYear() + '-' + String(selectedDay.getMonth() + 1).padStart(2,
+              '0')
+              + '-' + String(selectedDay.getDate()).padStart(2, '0')) : '' }}</strong>
+            <div class="text-muted small">{{ selectedDay ? selectedDay.toLocaleDateString('zh-TW', { weekday: 'long' })
+              : ''
+              }}</div>
+          </div>
+          <button class="btn btn-sm btn-link text-dark" @click="selectedDay = null">關閉</button>
+        </div>
+        <div class="drawer-body p-3">
+          <div v-if="selectedDay">
+            <div v-for="ev in eventsForDate(selectedDay)" :key="ev.id" class="mb-3">
+              <div class="fw-bold">
+                <template v-if="ev.url">
+                  <a :href="ev.url" target="_blank" rel="noopener" class="text-success link-like">{{ ev.title }}</a>
+                </template>
+                <template v-else>
+                  <a href="#" @click.prevent="openDay(ev.date)" class="text-reset">{{ ev.title }}</a>
+                </template>
+              </div>
+              <div class="text-sm text-muted">{{ ev.time }} • {{ ev.location }}</div>
+              <div class="text-sm mt-1">{{ ev.description }}</div>
+            </div>
+            <div v-if="eventsForDate(selectedDay).length === 0" class="text-muted">無活動</div>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <div class="mobile-drawer-backdrop" v-show="selectedDay" @click="selectedDay = null"></div>
 
     <div class="mt-5">
       <DefaultFooter />
@@ -469,5 +504,62 @@ const groupedEvents = computed(() => {
 .link-like:hover {
   color: var(--bs-danger, #dc3545);
   text-decoration: underline;
+}
+
+/* mobile drawer and responsive tweaks */
+.mobile-day-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 92%;
+  max-width: 420px;
+  background: #fff;
+  z-index: 1055;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.12);
+  display: none;
+  /* shown on small screens via media query */
+  overflow: auto;
+}
+
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1050;
+  display: none;
+}
+
+@media (max-width: 992px) {
+
+  /* hide desktop day card on small screens */
+  .desktop-day-card {
+    display: none !important;
+  }
+
+  /* show drawer and backdrop on mobile when v-show toggles them */
+  .mobile-day-drawer {
+    display: block;
+  }
+
+  .mobile-drawer-backdrop {
+    display: block;
+  }
+}
+
+/* slide transition */
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.22s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateX(0%);
 }
 </style>
