@@ -297,11 +297,12 @@ const nextUpcoming = computed(() => {
                         isoDate(day) === isoDate(selectedDay)
                         ? 'selected-day'
                         : '',
+                      day && (new Date().toDateString() === day.toDateString()) ? 'is-today' : ''
                     ]" class="p-0 align-top">
                       <div class="cell-inner">
                         <div v-if="day" class="cell-content p-2 d-flex flex-column clickable" @click="openDay(day)">
                           <div class="d-flex justify-content-between align-items-start">
-                            <strong>{{ day.getDate() }}</strong>
+                            <strong class="date-number">{{ day.getDate() }}</strong>
                             <small class="today-label text-warning">{{
                               new Date().toDateString() === day.toDateString()
                                 ? "今天"
@@ -322,7 +323,7 @@ const nextUpcoming = computed(() => {
                               </template>
                               <template v-else>
                                 <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title
-                                  }}</a>
+                                }}</a>
                               </template>
                             </div>
                           </div>
@@ -686,6 +687,16 @@ const nextUpcoming = computed(() => {
     visibility: hidden !important;
     height: 0 !important;
     overflow: hidden !important;
+  }
+
+  /* on mobile hide the '今天' label and instead color today's date number yellow */
+  .today-label {
+    display: none !important;
+  }
+
+  .is-today .date-number {
+    color: #ffc107;
+    font-weight: 700;
   }
 
 
