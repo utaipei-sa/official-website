@@ -68,23 +68,17 @@ const events = ref([
 const today = new Date();
 const current = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 // default select today (date-only)
-// default to today, but on mobile we don't want to auto-open the day drawer
-const selectedDay = ref(
-  new Date(today.getFullYear(), today.getMonth(), today.getDate())
-);
-
-onMounted(() => {
-  try {
-    // treat width < 992px as mobile (matches the CSS media query breakpoint)
-    const mq = window.matchMedia("(max-width: 992px)");
-    if (mq && mq.matches) {
-      // on mobile, don't auto-open today's drawer
-      selectedDay.value = null;
-    }
-  } catch (e) {
-    // ignore (e.g., during SSR or test env without window)
+// decide initial selectedDay based on whether we're on mobile; do a safe runtime check
+let initialSelectedDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+try {
+  if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(max-width: 992px)").matches) {
+    // on mobile, don't auto-open today's drawer
+    initialSelectedDay = null;
   }
-});
+} catch (e) {
+  // ignore (e.g., SSR or test env without window)
+}
+const selectedDay = ref(initialSelectedDay);
 
 // month / year quick selector helpers
 const monthNames = [
