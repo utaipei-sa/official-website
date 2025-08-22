@@ -4,6 +4,7 @@ import AboutView from "../views/LandingPages/AboutUs/AboutView.vue";
 import ContactView from "../views/LandingPages/ContactUs/ContactView.vue";
 import AuthorView from "../views/LandingPages/Author/AuthorView.vue";
 import SignInBasicView from "../views/LandingPages/SignIn/BasicView.vue";
+import CalendarView from "../views/Activities/CalendarView.vue";
 import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
 import PageFeatures from "../layouts/sections/page-sections/features/FeaturesView.vue";
 import NavigationNavbars from "../layouts/sections/navigation/navbars/NavbarsView.vue";
@@ -30,6 +31,11 @@ const router = createRouter({
       path: "/",
       name: "presentation",
       component: PresentationView,
+    },
+    {
+      path: "/activities/calendar",
+      name: "activities-calendar",
+      component: CalendarView,
     },
     {
       path: "/pages/landing-pages/about-us",
