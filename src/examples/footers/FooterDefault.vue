@@ -1,5 +1,5 @@
 <script setup>
-import logoDark from "@/assets/img/logo-ct-dark.png";
+import logoDark from "@/assets/img/UTlogo.png";
 defineProps({
   brand: {
     type: Object,
@@ -7,7 +7,7 @@ defineProps({
     logo: String,
     route: "",
     default: () => ({
-      name: "Material Kit 2",
+      name: "不藏私！資訊通通報你災!", //標題，可改
       logo: logoDark,
       route: "/"
     })
@@ -49,73 +49,43 @@ defineProps({
     },
     default: () => [
       {
-        name: "company",
+        name: "法規",
         items: [
-          {
-            name: "about us",
-            href: "https://www.creative-tim.com/presentation"
-          },
-          {
-            name: "freebies",
-            href: "https://www.creative-tim.com/templates/free"
-          },
-          {
-            name: "premium tools",
-            href: "https://www.creative-tim.com/templates/premium"
-          },
-          { name: "blog", href: "https://www.creative-tim.com/blog" }
+          { name: "法規", href: "#" },
+          { name: "會議記錄", href: "#" },
+          { name: "預決算書", href: "#" },
+          { name: "總務帳目", href: "#" },
+          { name: "法規", href: "#" },
+          { name: "會議記錄", href: "#" },
+          { name: "預決算書", href: "#" },
+          { name: "總務帳目", href: "#" }
         ]
       },
       {
-        name: "resources",
+        name: "會議記錄",
         items: [
-          { name: "illustrations", href: "https://iradesign.io/" },
-          {
-            name: "bits & snippets",
-            href: "https://www.creative-tim.com/bits"
-          },
-          {
-            name: "affiliate program",
-            href: "https://www.creative-tim.com/affiliates/new"
-          }
+          { name: "法規", href: "#" },
+          { name: "會議記錄", href: "#" },
+          { name: "預決算書", href: "#" },
+          { name: "總務帳目", href: "#" }
         ]
       },
       {
-        name: "help & support",
+        name: "預決算書",
         items: [
-          {
-            name: "contact us",
-            href: "https://www.creative-tim.com/contact-us"
-          },
-          {
-            name: "knowledge center",
-            href: "https://www.creative-tim.com/knowledge-center"
-          },
-          {
-            name: "custom development",
-            href: "https://services.creative-tim.com/"
-          },
-          {
-            name: "sponsorships",
-            href: "https://www.creative-tim.com/sponsorships"
-          }
+          { name: "114-1預算", href: "#" },
+          { name: "113-2結算", href: "#" },
+          { name: "113-2預算", href: "#" },
+          { name: "113-1結算", href: "#" }
         ]
       },
       {
-        name: "legal",
+        name: "總務帳目",
         items: [
-          {
-            name: "terms & conditions",
-            href: "https://www.creative-tim.com/terms"
-          },
-          {
-            name: "privacy policy",
-            href: "https://www.creative-tim.com/privacy"
-          },
-          {
-            name: "licenses (EULA)",
-            href: "https://www.creative-tim.com/license"
-          }
+          { name: "114-1期初", href: "#" },
+          { name: "113-2期末", href: "#" },
+          { name: "113-2預初", href: "#" },
+          { name: "113-1期末帳目表ㄚㄚㄚ", href: "#" }
         ]
       }
     ]
@@ -159,10 +129,12 @@ defineProps({
           <h6 class="text-sm">{{ name }}</h6>
           <ul class="flex-column ms-n3 nav">
             <li class="nav-item" v-for="item of items" :key="item.name">
-              <a class="nav-link" :href="item.href" target="_blank">
-                {{ item.name }}
+              <a class="nav-link footer-link" :href="item.href" target="_blank">
+                <span class="footer-text">{{ item.name }}</span>
+                <span class="tooltip-text">{{ item.name }}</span>
               </a>
             </li>
+
           </ul>
         </div>
 
@@ -182,3 +154,73 @@ defineProps({
     </div>
   </footer>
 </template>
+
+<style scoped>
+  .footer-link {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+.footer-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+/* 螢幕 >= 768px → 限制 7 個字 */
+@media (min-width: 768px) {
+  .footer-text {
+    max-width: 7em;
+  }
+}
+
+/* 螢幕 <= 767px → 限制 9 個字 */
+@media (max-width: 767px) {
+  .footer-text {
+    max-width: 9em;
+  }
+}
+
+/* tooltip 內容（預設隱藏） */
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  white-space: nowrap;
+  background-color: #DA847F;
+  color: #fff;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  position: absolute;
+  bottom: -28px; /* 在文字下方 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  font-size: 14px;
+  transition: opacity 0.2s;
+  pointer-events: none; /* 不影響滑鼠事件 */
+}
+
+/* tooltip 箭頭 */
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #F9E0DD transparent;
+}
+
+/* hover 時顯示 tooltip */
+.footer-link:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+</style>
