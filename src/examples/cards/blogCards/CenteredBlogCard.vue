@@ -26,8 +26,10 @@ defineProps({
 </script>
 <template>
   <div class="card">
-    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-      <a :href="action.route" class="d-block blur-shadow-image">
+    <div
+      class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 text-center"
+    >
+      <a :href="action.route" class="d-inline-block blur-shadow-image">
         <img :src="image" :alt="title" class="img-fluid border-radius-lg" />
       </a>
     </div>
@@ -35,12 +37,6 @@ defineProps({
       <h5 class="font-weight-normal">
         <a href="javascript:;">{{ title }}</a>
       </h5>
-      <p class="mb-0">
-        {{ description }}
-      </p>
-      <button type="button" class="btn btn-sm mb-0 mt-3" :class="action.color">
-        {{ action.label }}
-      </button>
     </div>
   </div>
 </template>
