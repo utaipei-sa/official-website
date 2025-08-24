@@ -41,7 +41,7 @@ export default {
     <div v-bind="$attrs" class="info">
       <i
         v-if="icon"
-        class="material-icons text-gradient"
+        class="material-icons"
         :class="`${
           typeof icon == 'object'
             ? `text-${icon.color} text-${icon.size}`
@@ -57,9 +57,12 @@ export default {
       >
         {{ typeof title == "string" ? title : title.text }}
       </h5>
-      <p :class="typeof description == 'string' ? 'pe-5' : description.class">
-        {{ typeof description == "string" ? description : description.text }}
-      </p>
+      <p
+        :class="
+          typeof description == 'string' ? 'pe-5 text-lg' : description.class
+        "
+        v-html="typeof description == 'string' ? description : description.text"
+      ></p>
     </div>
   </div>
 </template>

@@ -3,45 +3,34 @@
 import HorizontalTeamCard from "@/examples/cards/teamCards/HorizontalTeamCard.vue";
 
 // images
-import emma from "@/assets/img/team-5.jpg";
-import william from "@/assets/img/bruce-mars.jpg";
-import ivana from "@/assets/img/ivana-squares.jpg";
-import marquez from "@/assets/img/ivana-square.jpg";
+import UTSA_LiuEncheng from "@/assets/img/UTSA_LiuEncheng.jpg";
+import UTSA_ChenYinhua from "@/assets/img/UTSA_ChenYinhua.jpg";
+import UTSA_LaiHuanjin from "@/assets/img/UTSA_LaiHuanjin.jpg";
 </script>
 
 <template>
-  <section class="pb-5 position-relative bg-gradient-dark mx-n3">
+  <section class="pb-5 position-relative pink-theme mx-n3">
     <div class="container">
       <div class="row">
         <div class="col-md-8 text-start mb-5 mt-5">
-          <h3 class="text-white z-index-1 position-relative">
-            The Executive Team
-          </h3>
-          <p class="text-white opacity-8 mb-0">
-            There’s nothing I really wanted to do in life that I wasn’t able to
-            get good at. That’s my skill.
-          </p>
+          <h3 class="z-index-1 position-relative">👔 長級幹部</h3>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-6 col-12">
           <HorizontalTeamCard
             class="mt-4"
-            :image="emma"
-            :profile="{ name: 'Emma Roberts', link: 'javascript:;' }"
-            :position="{ label: 'UI Designer', color: 'success' }"
-            description="Artist is a term applied to a person who engages in an
-                    activity deemed to be an art."
+            :image="UTSA_LiuEncheng"
+            :profile="{ name: '劉恩誠', link: 'javascript:;' }"
+            :position="{ label: '學生會會長', color: 'success' }"
           />
         </div>
         <div class="col-lg-6 col-12">
           <HorizontalTeamCard
             class="mt-lg-4 mt-5"
-            :image="william"
-            :profile="{ name: 'William Pearce', link: 'javascript:;' }"
-            :position="{ label: 'Boss', color: 'success' }"
-            description="Artist is a term applied to a person who engages in an
-                    activity deemed to be an art."
+            :image="UTSA_ChenYinhua"
+            :profile="{ name: '陳胤華', link: 'javascript:;' }"
+            :position="{ label: '學生會博愛校區副會長', color: 'success' }"
           />
         </div>
       </div>
@@ -49,24 +38,29 @@ import marquez from "@/assets/img/ivana-square.jpg";
         <div class="col-lg-6 col-12">
           <HorizontalTeamCard
             class="mt-4 z-index-2"
-            :image="ivana"
-            :profile="{ name: 'Ivana Flow', link: 'javascript:;' }"
-            :position="{ label: 'Athlete', color: 'success' }"
-            description="Artist is a term applied to a person who engages in an
-                    activity deemed to be an art."
-          />
-        </div>
-        <div class="col-lg-6 col-12">
-          <HorizontalTeamCard
-            class="mt-lg-4 mt-5 z-index-2"
-            :image="marquez"
-            :profile="{ name: 'Marquez Garcia', link: 'javascript:;' }"
-            :position="{ label: 'JS Developer', color: 'success' }"
-            description="Artist is a term applied to a person who engages in an
-                    activity deemed to be an art."
+            :image="UTSA_LaiHuanjin"
+            :profile="{ name: '賴桓津', link: 'javascript:;' }"
+            :position="{ label: '學生會天母校區副會長', color: 'success' }"
           />
         </div>
       </div>
     </div>
   </section>
 </template>
+<style>
+.pink-theme .team-card {
+  background: #fff0f6; /* 淺粉背景 */
+  border: 1px solid #f5a6c5; /* 粉紅邊框 */
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pink-theme .team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(251, 204, 223, 0.6);
+}
+
+.pink-theme .team-card h6 {
+  color: #f77fb3 !important; /* 職位小標籤 */
+}
+</style>

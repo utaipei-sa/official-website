@@ -8,7 +8,7 @@ defineProps({
     type: Object,
     required: true,
     name: String,
-    link: String,
+    //link: String,
   },
   position: {
     type: Object,
@@ -23,7 +23,7 @@ defineProps({
 });
 </script>
 <template>
-  <div class="card card-profile">
+  <div class="card card-profile team-card">
     <div class="row">
       <div class="col-lg-4 col-md-6 col-12 mt-n5">
         <a :href="profile.link">
