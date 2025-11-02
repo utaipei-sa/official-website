@@ -93,7 +93,10 @@ function handleClick() {
   text-align: center;
   width: 100%;
   font-size: clamp(14px, 2vw, 20px);
-  transform-origin: center;
+  /* transform-origin: center; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 /* 利用字體縮放動態適應：當容器太小時自動縮小 */
@@ -116,11 +119,29 @@ function handleClick() {
 /* hover 動畫 */
 .info {
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
 }
+
 @media (hover: hover) {
   .info:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    /* transform: translateY(-4px); */
+    transform: translateY(-6px);
+    /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); */
+    box-shadow: 0 10px 20px rgba(0, 61, 121, 0.15);
+  
   }
 }
+@media (max-width: 600px) {
+  .title-text {
+    white-space: normal;
+    text-overflow: clip;
+    line-height: 1.3;
+  }
+}
+
 </style>

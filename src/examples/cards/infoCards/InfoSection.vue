@@ -1,14 +1,15 @@
 <script setup>
+import {ref} from "vue";
 import InfoCard from "./InfoCard.vue";
 
-const items = [
-  { title: "學權事件處理進度查詢", description: "Google Sheet 連結", link: "#" },
-  { title: "法規", description: "GitHub 文件", link: "#" },
+const items = ref([
+  { title: "學權事件", description: "處理進度查詢", link: "https://docs.google.com/spreadsheets/d/1Vbj5kCqen85bpaxfsoHG2LrygSMFtsnM2F9ZvQUiIM8/edit?gid=1553526640#gid=1553526640" },
+  { title: "法規", description: "GitHub 文件", link: "https://github.com/utaipei-sa/regulations" },
   { title: "學生議會", description: "會議紀錄與資料", link: "#" },
   { title: "會費相關", description: "收費與用途", link: "#" },
   { title: "預決算書", description: "財務透明化文件", link: "#" },
   { title: "收支公告", description: "每月收支明細", link: "#" },
-];
+]);
 </script>
 
 <template>
@@ -48,6 +49,8 @@ const items = [
 
   /* 關鍵：讓同一排的卡片等高 */
   align-items: stretch;
+
+  grid-auto-rows: 1fr;
 }
 
 /* ===== InfoCard 卡片統一設定 ===== */
