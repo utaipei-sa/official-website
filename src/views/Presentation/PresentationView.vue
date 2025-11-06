@@ -9,6 +9,7 @@ import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../examples/footers/FooterDefault.vue";
 import Header from "../../examples/Header.vue";
 import FilledInfoCard from "../../examples/cards/infoCards/FilledInfoCard.vue";
+import InfoSection from "../../examples/cards/infoCards/InfoSection.vue";
 
 
 // sections
@@ -117,8 +118,9 @@ onUnmounted(() => {
     </p>
     <hr class="my-4" />
     <section id ="intro" class="py-5">
+      <InfoSection/>
       <!-- 資訊公開頁面 -->
-     <!-- <Info/> -->
+      <!-- <Info/> -->
     </section>
   </div>
 </div>
