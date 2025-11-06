@@ -58,16 +58,9 @@ const items = [
     `
   },
   { 
-    title: "收支公告", 
-    description: "每月收支明細", 
-    modalContent: `
-      <iframe 
-        src="https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit?gid=0" 
-        width="150%"
-        height="500vh"
-        style="border:none;">
-      </iframe>
-    `
+    title: "素材專區", 
+    description: "素材都在這裡！", 
+    link:"#",
   }
 ];
 
