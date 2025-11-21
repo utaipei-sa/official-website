@@ -8,7 +8,7 @@ let observer;
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../examples/footers/FooterDefault.vue";
 import Header from "../../examples/Header.vue";
-import FilledInfoCard from "../../examples/cards/infoCards/FilledInfoCard.vue";
+//import FilledInfoCard from "../../examples/cards/infoCards/FilledInfoCard.vue";
 import InfoSection from "../../examples/cards/infoCards/InfoSection.vue";
 
 

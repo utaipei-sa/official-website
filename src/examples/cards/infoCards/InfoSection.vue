@@ -5,7 +5,19 @@ import InfoModal from "./InfoModal.vue";
 
 const iframeStyle = `style="width:100%; max-height:500px; border:none; overflow:auto;"`
 const items = [
-  { title: "學權事件", description: "處理進度查詢", link: "https://docs.google.com/spreadsheets/d/1Vbj5kCqen85bpaxfsoHG2LrygSMFtsnM2F9ZvQUiIM8/edit?gid=1553526640#gid=1553526640" },
+  { 
+    title: "學權事件",
+    description: "處理進度查詢",
+    modalContent: `
+      <iframe
+        src="https://docs.google.com/spreadsheets/d/1Vbj5kCqen85bpaxfsoHG2LrygSMFtsnM2F9ZvQUiIM8/edit?gid=1553526640#gid=1553526640"
+        width="100%"
+        height="100%"
+        style="border:none;">
+      </iframe>
+    `
+  },
+    
   { title: "法規", description: "GitHub 文件", link: "https://github.com/utaipei-sa/regulations" },
   { 
     title: "學生議會", 
@@ -51,8 +63,8 @@ const items = [
     modalContent: `
       <iframe
         src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR-mkjrwlZJgrs_QcIIn1p7QjvuSPI388oa2Nq_q4zMpbQVxY1BCX08NDNRahVzpw/pubhtml?widget=true&amp;headers=false"
-        width="200%"
-        height="500vh"
+        width="100%"
+        height="100%"
         style="border:none;">
       </iframe>
     `

@@ -97,7 +97,6 @@ function close() {
 /* 內容滾動區 */
 .content {
   flex: 1;
-  overflow-y: auto;
   padding: 20px;
   background: #fff;
 }
@@ -109,6 +108,7 @@ function close() {
   line-height: 1.6;
   white-space: pre-line;
   border-radius: 12px;
+  height: calc(100% - 20px);
 }
 
 /* iframe / PDF 自動縮放置中顯示 */
@@ -217,7 +217,7 @@ function close() {
   }
 }
 
-/* === 更小裝置 (小於 480px) 再進一步優化 === */
+/* === 更小裝置 (小於 480px) === */
 @media (max-width: 480px) {
   .modal-content {
     width: 95%;
