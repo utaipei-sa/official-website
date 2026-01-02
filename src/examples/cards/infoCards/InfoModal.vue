@@ -52,8 +52,9 @@ function close() {
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 80px;  
+  align-items: center;
+
+  padding: 85px 20px 20px 20px;  
   z-index: 1000;
   backdrop-filter: blur(2px);
   animation: fadeIn 0.2s ease-in;
@@ -61,6 +62,7 @@ function close() {
 
 /* Modal 內容區 */
 .modal-content {
+  padding: 0;
   display: flex;
   flex-direction: column;
   width: 950px; /* 加寬 */
@@ -97,8 +99,11 @@ function close() {
 /* 內容滾動區 */
 .content {
   flex: 1;
-  padding: 20px;
+  padding: 0px;
   background: #fff;
+  overflow-y:auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 詳細內容 */
@@ -109,7 +114,10 @@ function close() {
   white-space: pre-line;
   border-radius: 12px;
   height: calc(100% - 20px);
+  padding: 10px 25px 25px 25px; 
+  flex: 1;
 }
+
 
 /* iframe / PDF 自動縮放置中顯示 */
 .iframe-wrapper {
@@ -178,10 +186,10 @@ function close() {
 /* === 小螢幕優化 === */
 @media (max-width: 768px) {
   .modal-content {
-    width: 92%;
-    height: auto; /* 改為自動高度，內容多時可滾動 */
-    max-height: 85vh;
-    margin: 20px; /* 🔹 增加邊距，避免太貼邊 */
+    width: 95%;
+    height: 90vh;
+    max-height: 90vh;
+    margin: 10px auto; 
     border-radius: 16px;
   }
 
@@ -192,6 +200,10 @@ function close() {
 
   .content {
     padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
   }
 
   .modal-details {
@@ -209,10 +221,15 @@ function close() {
     font-size: 0.9rem;
   }
 
+  .iframe-wrapper {
+    flex: 1;          /* 讓容器自動伸展填滿內容區 */
+    width: 100%;
+    min-height: 60vh; /* 設定最小高度防止塌陷 */
+  }
   /*  讓內嵌的 Google Sheet / PDF 自動縮放以適應手機寬度 */
   .iframe-wrapper iframe {
     width: 100%;
-    height: 70vh;
+    height: 100%;
     transform: none; /* 手機不再縮放，直接塞滿寬度 */
   }
 }
