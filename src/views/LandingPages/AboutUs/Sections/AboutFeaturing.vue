@@ -1,82 +1,57 @@
 <script setup>
+// image
+import logo1 from "@/assets/img/logo1.png";
+import logo1_2 from "@/assets/img/logo1_2.png";
+import logo2 from "@/assets/img/logo2.png";
 // example component
-import DefaultCounterCard from "../../../../examples/cards/counterCards/DefaultCounterCard.vue";
+import CenteredBlogCard from "../../../../examples/cards/blogCards/CenteredBlogCard.vue";
 </script>
 <template>
   <section class="pt-4 pb-6" id="count-stats">
     <div class="container">
-      <div class="row mb-7">
-        <div class="col-lg-2 col-md-4 col-6 mb-4">
-          <img
-            class="w-100 opacity-7"
-            src="@/assets/img/logos/gray-logos/logo-coinbase.svg"
-            alt="logo"
-          />
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 mb-4">
-          <img
-            class="w-100 opacity-7"
-            src="@/assets/img/logos/gray-logos/logo-nasa.svg"
-            alt="logo"
-          />
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 mb-4">
-          <img
-            class="w-100 opacity-7"
-            src="@/assets/img/logos/gray-logos/logo-netflix.svg"
-            alt="logo"
-          />
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 mb-4">
-          <img
-            class="w-100 opacity-7"
-            src="@/assets/img/logos/gray-logos/logo-pinterest.svg"
-            alt="logo"
-          />
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 mb-4">
-          <img
-            class="w-100 opacity-7"
-            src="@/assets/img/logos/gray-logos/logo-spotify.svg"
-            alt="logo"
-          />
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 mb-4">
-          <img
-            class="w-100 opacity-7"
-            src="@/assets/img/logos/gray-logos/logo-vodafone.svg"
-            alt="logo"
-          />
-        </div>
-      </div>
-      <div class="row justify-content-center text-center">
-        <div class="col-md-3">
-          <DefaultCounterCard
-            title="Projects"
-            description="Of “high-performing” level are led by a certified project manager"
-            :count="5234"
-            :duration="3000"
-          />
-        </div>
-        <div class="col-md-3">
-          <DefaultCounterCard
-            title="Hours"
-            description="That meets quality standards required by our users"
-            :count="3400"
-            suffix="+"
-            :duration="3000"
-          />
-        </div>
-        <div class="col-md-3">
-          <DefaultCounterCard
-            title="Support"
-            description="Actively engage team members that finishes on time"
-            :count="24"
-            suffix="/7"
-            :duration="4000"
-          />
+      <div class="row mt-4 mb-4">
+        <h2 class="title-shift">素材專區</h2>
+        <div
+          class="row mt-6 align-items-stretch justify-content-center text-center"
+        >
+          <div class="col-md-3 mb-6">
+            <CenteredBlogCard
+              class="centered-card"
+              :image="logo1"
+              title="學生會 LOGO"
+            />
+          </div>
+          <div class="col-md-3 mb-6">
+            <CenteredBlogCard
+              class="centered-card"
+              :image="logo1_2"
+              title="學生會 LOGO"
+            />
+          </div>
+          <div class="col-md-3 mb-6">
+            <CenteredBlogCard
+              class="centered-card"
+              :image="logo2"
+              title="學生議會 LOGO"
+            />
+          </div>
         </div>
       </div>
     </div>
   </section>
 </template>
+<style>
+.centered-card {
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.title-shift {
+  margin-left: 10%; /* 可以改數值調整，20% 大概就是介於左邊跟中間 */
+  /*text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.3); /* X位移 Y位移 模糊程度 顏色 */
+}
+
+.row.mt-6.align-items-stretch.justify-content-center.text-center {
+  justify-content: center; /* row 置中 */
+}
+</style>
