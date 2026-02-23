@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted } from "vue";
 
 //example components
-import DefaultNavbar from "../../../examples/navbars/NavbarDefault.vue";
+import NavbarDefault from "../../../examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../../examples/footers/FooterDefault.vue";
 
 //image
@@ -42,14 +42,17 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <DefaultNavbar
-    :action="{
-      route: 'javascript:;',
-      label: 'Buy Now',
-      color: 'btn-white',
-    }"
-    transparent
-  />
+  <div 
+    class="container position-fixed z-index-sticky" 
+    style="top: 8px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 100%;"
+  >
+    <div class="row">
+      <div class="col-12">
+        <NavbarDefault :sticky="false" />
+      </div>
+    </div>
+  </div>
+
   <header class="bg-gradient-dark">
     <div
       class="page-header min-vh-75"
@@ -59,8 +62,7 @@ onUnmounted(() => {
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center mx-auto my-auto">
-            <h1 class="text-white">臺北市立大學<span id="typed"></span></h1>
-            <span class="typed-cursor" aria-hidden="true">|</span>
+            <h1 class="text-white">臺北市立大學<span class="text-white" id="typed"></span></h1>
             <div id="typed-strings">
               <span>學生會</span>
             </div>

@@ -1,79 +1,31 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 // import page header banner image
-import headerImage from './assets/img/活動行事曆橫幅.jpg';
+import headerImage from "./assets/img/活動行事曆橫幅.jpg";
 
 import NavbarDefault from "../../examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../examples/footers/FooterDefault.vue";
 import ActivityCard from "./components/ActivityCard.vue";
+import { supabase } from "../../db/supabase";
 
 // sample events
-const events = ref([
-  {
-    id: 1,
-    date: "2025-08-03",
-    title: "迎新茶會",
-    time: "14:00",
-    location: "活動中心",
-    description: "迎新與學長姐交流",
-    tag: "社交",
-    url: "https://example.com/welcome-tea",
-  }, {
-    id: 1,
-    date: "2025-09-03",
-    title: "迎新茶會",
-    time: "14:00",
-    location: "活動中心",
-    description: "迎新與學長姐交流",
-    tag: "社交",
-    url: "https://example.com/welcome-tea",
-  },
-  {
-    id: 1,
-    date: "2025-09-03",
-    title: "迎新晚會",
-    time: "17:00",
-    location: "活動中心",
-    description: "迎新與學長姐交流",
-    tag: "社交",
-    url: "https://example.com/welcome-party",
-  },
-  {
-    id: 2,
-    date: "2025-09-10",
-    title: "系學會例會",
-    time: "18:30",
-    location: "403教室",
-    description: "本月例行會議",
-    tag: "會議",
-  },
-  {
-    id: 3,
-    date: "2025-09-18",
-    title: "志工說明會",
-    time: "16:00",
-    location: "多功能教室",
-    description: "招募下學期志工",
-    tag: "招募",
-  },
-  {
-    id: 4,
-    date: "2025-10-01",
-    title: "月初籌備會",
-    time: "12:00",
-    location: "辦公室",
-    description: "活動分工",
-    tag: "內務",
-  },
-]);
+const events = ref([]);
 
 const today = new Date();
 const current = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 // default select today (date-only)
 // decide initial selectedDay based on whether we're on mobile; do a safe runtime check
-let initialSelectedDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+let initialSelectedDay = new Date(
+  today.getFullYear(),
+  today.getMonth(),
+  today.getDate()
+);
 try {
-  if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(max-width: 992px)").matches) {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(max-width: 992px)").matches
+  ) {
     // on mobile, don't auto-open today's drawer
     initialSelectedDay = null;
   }
@@ -144,7 +96,11 @@ function nextMonth() {
 function goToToday() {
   // jump the calendar to today's month and select today
   current.value = new Date(today.getFullYear(), today.getMonth(), 1);
-  selectedDay.value = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  selectedDay.value = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
 }
 
 function startOfMonth(d) {
@@ -213,6 +169,11 @@ function eventDateTime(ev) {
   // months are 0-based
   return new Date(parts[0], parts[1] - 1, parts[2], hh, mm, ss);
 }
+
+const formatContent = (text) => {
+  // 加上空值保護，避免 text 為空時使用 replace 報錯
+  return text ? text.replaceAll("\n", "<br>") : "";
+};
 
 // groupedEvents: only include events whose datetime >= now (precision to time)
 const groupedEvents = computed(() => {
@@ -286,18 +247,44 @@ const nextUpcoming = computed(() => {
     });
   return future.length ? future[0] : null;
 });
+
+onMounted(async () => {
+  window.scrollTo(0, 0);
+
+  const { data, error } = await supabase
+    .from("activities")
+    .select("id,title,start_time,description,location,url,tag");
+
+  if (error) {
+    console.error(error);
+  } else {
+    for (const element of data) {
+      element.date = isoDate(new Date(element.start_time));
+
+      const startTime = new Date(element.start_time);
+      const hours = String(startTime.getHours()).padStart(2, "0");
+      const minutes = String(startTime.getMinutes()).padStart(2, "0");
+      element.time = `${hours}:${minutes}`;
+    }
+    events.value = data;
+  }
+  console.log(events.value);
+});
 </script>
 
 <template>
-  <div>
-    <div class="container position-sticky z-index-sticky top-0">
-      <div class="row">
-        <div class="col-12">
-          <NavbarDefault :sticky="true" />
-        </div>
+  <div 
+    class="container position-fixed z-index-sticky" 
+    style="top: 8px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 100%;"
+  >
+    <div class="row">
+      <div class="col-12">
+        <NavbarDefault :sticky="false" />
       </div>
     </div>
+  </div>
 
+  <div>
     <div class="page-header min-vh-25"
       :style="{ background:`linear-gradient(#ffffff99), url('${headerImage}')`, backgroundSize: 'cover', backgroundPosition: 'center' }">
       <div class="container py-5">
@@ -390,19 +377,34 @@ const nextUpcoming = computed(() => {
                           </div>
                           <div class="mt-1 event-preview">
                             <!-- mobile: single dot if there's any event on this day -->
-                            <span v-if="eventsForDate(day).length" class="event-dot me-2 d-inline-block"
+                            <span
+                              v-if="eventsForDate(day).length"
+                              class="event-dot me-2 d-inline-block"
                               aria-hidden="true"></span>
                             <!-- desktop: show full event list -->
-                            <div v-for="ev in eventsForDate(day)" :key="ev.id"
+                            <div
+                              v-for="ev in eventsForDate(day)"
+                              :key="ev.id"
                               class="event-item d-flex align-items-center event-preview-detail">
                               <span class="badge bg-gradient-info event-time">{{ ev.time }}</span>
                               <template v-if="ev.url">
-                                <a :href="ev.url" target="_blank" rel="noopener"
-                                  class="ms-1 event-title text-primary link-like" @click.stop>{{ ev.title }}</a>
+                                <a
+                                  :href="ev.url"
+                                  target="_blank"
+                                  rel="noopener"
+                                  class="ms-1 event-title text-primary link-like" @click.stop
+                                >
+                                  {{ ev.title }}
+                                </a>
                               </template>
                               <template v-else>
-                                <a href="#" @click.prevent.stop="openDay(day)" class="ms-1 event-title">{{ ev.title
-                                }}</a>
+                                <a
+                                  href="#"
+                                  @click.prevent.stop="openDay(day)"
+                                  class="ms-1 event-title"
+                                >
+                                  {{ ev.title }}
+                                </a>
                               </template>
                             </div>
                           </div>
@@ -425,11 +427,11 @@ const nextUpcoming = computed(() => {
             <h6>當日活動</h6>
             <div v-if="selectedDay">
               <div class="mb-2">
-                <strong>{{ selectedDay.getFullYear() }}-{{
-                  String(selectedDay.getMonth() + 1).padStart(2, "0")
-                }}-{{
-                    String(selectedDay.getDate()).padStart(2, "0")
-                  }}</strong>
+                <strong>
+                  {{ selectedDay.getFullYear() }}-{{
+                    String(selectedDay.getMonth() + 1).padStart(2, "0")
+                  }}-{{ String(selectedDay.getDate()).padStart(2, "0") }}
+                </strong>
                 <div class="text-muted small">
                   {{
                     selectedDay.toLocaleDateString("zh-TW", {
@@ -438,29 +440,49 @@ const nextUpcoming = computed(() => {
                   }}
                 </div>
               </div>
-              <div v-for="ev in eventsForDate(selectedDay)" :key="ev.id" class="mb-3">
+              <div
+                v-for="ev in eventsForDate(selectedDay)"
+                :key="ev.id"
+                class="mb-3"
+              >
                 <div class="d-flex justify-content-between">
                   <div>
                     <div class="fw-bold">
                       <template v-if="ev.url">
-                        <a :href="ev.url" target="_blank" rel="noopener" class="text-primary link-like">{{ ev.title
-                        }}</a>
+                        <a
+                          :href="ev.url"
+                          target="_blank"
+                          rel="noopener"
+                          class="text-primary link-like"
+                          >{{ ev.title }}</a
+                        >
                       </template>
                       <template v-else>
-                        <a href="#" @click.prevent="openDay(ev.date)" class="text-reset">{{ ev.title }}</a>
+                        <a
+                          href="#"
+                          @click.prevent="openDay(ev.date)"
+                          class="text-reset"
+                          >{{ ev.title }}</a
+                        >
                       </template>
                     </div>
                     <div class="text-sm text-muted">
                       {{ ev.time }} • {{ ev.location }}
                     </div>
-                    <div class="text-sm mt-1">{{ ev.description }}</div>
+                    <div
+                      class="text-sm mt-1"
+                      v-html="formatContent(ev.description)"
+                    ></div>
                   </div>
                   <div>
                     <span class="badge event-category-badge">{{ ev.tag }}</span>
                   </div>
                 </div>
               </div>
-              <div v-if="eventsForDate(selectedDay).length === 0" class="text-muted">
+              <div
+                v-if="eventsForDate(selectedDay).length === 0"
+                class="text-muted"
+              >
                 無活動
               </div>
             </div>
