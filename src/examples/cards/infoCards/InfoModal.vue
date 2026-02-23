@@ -115,6 +115,7 @@ function close() {
   white-space: pre-line;
   border-radius: 12px;
   height: calc(100% - 20px);
+  height: calc(100% - 20px);
   padding: 10px 25px 25px 25px; 
   flex: 1;
 }
