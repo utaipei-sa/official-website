@@ -4,8 +4,8 @@
       <div class="activity-column announcement">
         <div class="activity-header">
           <span style="font-weight: bold; 
-             font-size: 32px;
-             background: -webkit-linear-gradient(transparent 65%,#ffcbff 60%, #ffcbff 100%,transparent 100%);">
+              font-size: 32px;
+              background: -webkit-linear-gradient(transparent 65%,#ffcbff 60%, #ffcbff 100%,transparent 100%);">
             最新公告
           </span>
         </div>
@@ -16,8 +16,7 @@
             class="activity-item"
             v-for="(item,index) in activeAnnouncements"
             :key="index"
-             @click="openModal(item,$event)"
-          >
+            @click="openModal(item)" >
             <strong>{{ item.date }} {{ item.title }}</strong>
           </div>
         </div>
@@ -25,18 +24,20 @@
     </div>
     
   </div>
-  <transition name="fade">
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-box" :style="modalStyles">
-        <button class="close-btn" @click="closeModal">×</button>
-        <h3>{{ selectedItem.title }}</h3>
-        <p style="color:#666;">{{ selectedItem.date }}</p>
-        <div class="modal-content-wrapper">
-          <p class="modal-content" v-html="formatContent(selectedItem.content)"></p>
+  <Teleport to="body">
+    <transition name="fade">
+      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+        <div class="modal-box">
+          <h3>{{ selectedItem.title }}</h3>
+          <p style="color:#666;">{{ selectedItem.date }}</p>
+          <div class="content-divider"></div>
+          <div class="modal-content-wrapper">
+            <p class="modal-content" v-html="formatContent(selectedItem.content)"></p>
+          </div>
         </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </Teleport>
 </template>
 
 <script>
@@ -52,33 +53,24 @@ export default {
       ],
       showModal: false, 
       selectedItem: {},
-      modalPosition: { top: '50%' }
+      // 移除 modalPosition 及其在 data 中的初始化
     }
   },
   computed: {
     activeAnnouncements() {
       return this.announcements.filter(a => a.status === "active");
     },
-    modalStyles() {
-      return {
-        top: this.modalPosition.top,
-        // transform: 'none'
-      };
-    }
+    // 移除 modalStyles
   },
   methods: {
-    openModal(item, event) { 
+    // 移除 event 參數和定位邏輯
+    openModal(item) { 
       this.selectedItem = item;
-      const mouseY = event.pageY;
-      this.modalPosition = {
-          top: `${mouseY-500}px`,
-          // transform: 'none' 
-      };
       this.showModal = true;
     },
     closeModal() {
       this.showModal = false;
-      this.modalPosition = { top: '50%'};
+      // 移除 modalPosition 的重置
     },
     formatContent(text) {
     return text.replace(/\n/g, "<br>");
@@ -88,6 +80,7 @@ export default {
 </script>
 
 <style>
+/* 保持原有樣式 */
 .activities-wrapper {
   display: flex;
   flex-direction: column;
@@ -108,11 +101,11 @@ export default {
 }
 
 .header-divider {
-  width: 100%;              
-  height: 2px;                
+  width: 100%;             
+  height: 2px;             
   background-color: #ffdbf0; 
   margin: 8px 0;             
-  border-radius: 1px;         
+  border-radius: 1px;        
 }
 
 .announcement .activity-list {
@@ -124,6 +117,7 @@ export default {
 .activity-item {
   font-size: 20px;
   color:#37526d;
+  cursor: pointer; /* 增加鼠標指標，提示可點擊 */
 }
 .activity-header span {
   color: #37526d; 
@@ -137,36 +131,44 @@ export default {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: block;
-  align-items: unset; 
-  justify-content: unset;
+  /* 關鍵修改：移除 flex 居中屬性，讓 modal-box 獨立定位 */
+  display: flex ; /* 強制覆蓋任何可能的 display 設置 */
+  align-items: center ; /* 強制垂直居中 */
+  justify-content: center ; /* 強制水平居中 */
   z-index: 999;
-   /* padding-top: 10vh;  */
 }
 
 
-
+/* 彈窗主體樣式：修改為居中定位 */
 .modal-box {
-  position: fixed;
+  position: relative ; 
+  /* top: auto !important;
+  left: auto !important;
+  margin: 0 !important; 
+  transform: none !important; */
+
   background: white;
   padding: 24px 30px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  /* max-width: 80%; */
   width: 85%;
-  max-height: 75vh;
+  max-width: 70%; /* 增加 max-width 提升可讀性 */
+  max-height: 70vh; /* 確保內容不會超出視窗 */
+  min-height: 350px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  left: 50%;
-  transform: translateX(-50%);
-
+  margin: 0; 
+  top: auto;
+  left: auto;
+  transform: none;
 }
+
 .modal-content-wrapper {
-  flex: 1;             
+  flex: 1;           
   overflow-y: auto;    
   margin: 12px 0;
+  text-align: center;
 }
 
 .modal-content {
@@ -174,22 +176,10 @@ export default {
   line-height: 1.6;
 }
 
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  font-size: 24px;
-  background: none;
-  border: none;
-  color: #777;
-  cursor: pointer;
-  line-height: 1;
-  padding: 2px 6px;
-  transition: color 0.2s ease;
-}
+.content-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #FFCBFF; 
 
-.close-btn:hover {
-  color: #000;
 }
-
 </style>

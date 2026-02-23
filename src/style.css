@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+    color: var(--text-color);
+}
+
+:root {
+    --primary-color: #da847f;
+    --secondary-color: #fadfdf;
+    --accent-color: #FFE2FD;
+    --font-family: 'Helvetica Neue', Arial, sans-serif;
+    --background-color: #FAFAFA;
+    --text-color: #344767;
+}
+
+body {
+    font-family: var(--font-family);
+}
+
+.text-bold {
+    color: var(--text-color) !important;
+    font-weight: bold !important;
+}
+
+.border-primary {
+    border-color: var(--primary-color) !important;
+}

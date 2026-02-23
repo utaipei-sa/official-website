@@ -43,10 +43,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="container position-sticky z-index-sticky top-0">
+  <div 
+    class="container position-fixed z-index-sticky" 
+    style="top: 8px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 100%;"
+  >
     <div class="row">
       <div class="col-12">
-        <NavbarDefault :sticky="true" />
+        <NavbarDefault :sticky="false" />
       </div>
     </div>
   </div>
@@ -87,7 +90,7 @@ onUnmounted(() => {
     <div class="container mt-1">
       <div class="row">
         <div class="col-md-6 mb-5 mb-md-0">
-          <Announcement />
+          <History/>
         </div>
         <div class="col-md-6">
           <UsefulLinks />
@@ -95,8 +98,8 @@ onUnmounted(() => {
       </div>
       <hr class="my-4" />
       <div class="row">
-        <div class="col-md-6 mb-5 mb-md-0">
-          <History/>
+        <div class="col-12 mb-5 mb-md-0">
+          <Announcement />
         </div>
       </div>
     </div>

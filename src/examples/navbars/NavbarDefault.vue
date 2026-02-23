@@ -7,6 +7,7 @@ import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import downArrow from "@/assets/img/down-arrow.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
+import NavbarImage from "@/assets/img/UTSAicon_NavbarImage.png";
 const router = useRouter();
 
 function scrollToIntro() {
@@ -123,6 +124,7 @@ watch(
         :to="{ name: 'presentation' }"
         @click="scrollToTop"
       >
+      <img :src="NavbarImage" alt="學生會Logo" class="navbar-logo me-2" />
         臺北市立大學學生會
       </RouterLink>
       <RouterLink
@@ -135,6 +137,7 @@ watch(
         :to="{ name: 'presentation' }"
         @click="scrollToTop"
       >
+      <img :src="NavbarImage" alt="學生會Logo" class="navbar-logo me-2" />
         臺北市立大學學生會
       </RouterLink>
       <button
@@ -309,6 +312,11 @@ watch(
   display: flex;
   align-items: center;
 }
+.navbar-logo {
+  height: 35px; /* 根據您的需求調整高度 */
+  width: auto;
+  vertical-align: middle;
+}
 .navbar .dropdown-item {
   padding: 0.1rem 0.1rem !important;
   font-size: 0.95rem;
@@ -334,13 +342,15 @@ watch(
 .navbar {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100% !important; 
-  margin: 0 !important;
+  left: 50%;
+  width:95% !important; 
+  margin: 2px !important;
+  transform: translateX(-50%);
   border-radius: 0 !important;
-  background-color: rgba(255, 255, 255, 1) !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(8px);
   z-index: 1000;
+  border-radius: 0.75rem !important; /* 添加圓角 */
 }
 .navbar-brand {
   font-size: 1.4rem !important; 
