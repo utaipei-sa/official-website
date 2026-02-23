@@ -6,16 +6,16 @@ import DefaultNavbar from "../../../examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../../examples/footers/FooterDefault.vue";
 
 //image
-import bg0 from "@/assets/img/bg9.jpg";
+import bg0 from "@/assets/img/sportField.jpg";
 
 //dep
 import Typed from "typed.js";
 
 //sections
 import Information from "./Sections/AboutInformation.vue";
-import AboutTeam from "./Sections/AboutTeam.vue";
+//import AboutTeam from "./Sections/AboutTeam.vue";
 import Featuring from "./Sections/AboutFeaturing.vue";
-import Newsletter from "./Sections/AboutNewsletter.vue";
+//import Newsletter from "./Sections/AboutNewsletter.vue";
 
 const body = document.getElementsByTagName("body")[0];
 //hooks
@@ -27,9 +27,9 @@ onMounted(() => {
     // eslint-disable-next-line no-unused-vars
     var typed = new Typed("#typed", {
       stringsElement: "#typed-strings",
-      typeSpeed: 90,
-      backSpeed: 90,
-      backDelay: 200,
+      typeSpeed: 250,
+      backSpeed: 200,
+      backDelay: 350,
       startDelay: 500,
       loop: true,
     });
@@ -59,35 +59,10 @@ onUnmounted(() => {
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center mx-auto my-auto">
-            <h1 class="text-white">
-              Work with an amazing <span class="text-white" id="typed"></span>
-            </h1>
+            <h1 class="text-white">臺北市立大學<span id="typed"></span></h1>
+            <span class="typed-cursor" aria-hidden="true">|</span>
             <div id="typed-strings">
-              <h1>team</h1>
-              <h1>design</h1>
-              <h1>tool</h1>
-            </div>
-            <p class="lead mb-4 text-white opacity-8">
-              We’re constantly trying to express ourselves and actualize our
-              dreams. If you have the opportunity to play this game
-            </p>
-            <button type="submit" class="btn bg-white text-dark">
-              Create Account
-            </button>
-            <h6 class="text-white mb-2 mt-5">Find us on</h6>
-            <div class="d-flex justify-content-center">
-              <a href="javascript:;"
-                ><i class="fab fa-facebook text-lg text-white me-4"></i
-              ></a>
-              <a href="javascript:;"
-                ><i class="fab fa-instagram text-lg text-white me-4"></i
-              ></a>
-              <a href="javascript:;"
-                ><i class="fab fa-twitter text-lg text-white me-4"></i
-              ></a>
-              <a href="javascript:;"
-                ><i class="fab fa-google-plus text-lg text-white"></i
-              ></a>
+              <span>學生會</span>
             </div>
           </div>
         </div>
@@ -96,9 +71,8 @@ onUnmounted(() => {
   </header>
   <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
     <Information />
-    <AboutTeam />
+    <!--<AboutTeam />-->
     <Featuring />
-    <Newsletter />
   </div>
   <DefaultFooter />
 </template>

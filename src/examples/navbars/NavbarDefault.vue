@@ -138,7 +138,7 @@ watch(
         @click="scrollToTop"
       >
       <img :src="NavbarImage" alt="學生會Logo" class="navbar-logo me-2" />
-        臺北市立大學學生會
+        北市大學生會
       </RouterLink>
       <button
         class="navbar-toggler shadow-none ms-2"

@@ -18052,7 +18052,7 @@ textarea.form-control-lg {
   top: 0;
   content: "";
   border-radius: 0.5rem;
-  background-image: linear-gradient(195deg, #EC407A, #D81B60);
+  background-image: linear-gradient(195deg, #fce4ec, #f8bbd0);
   opacity: 0.85;
 }
 .rotating-card-container .card .front {
