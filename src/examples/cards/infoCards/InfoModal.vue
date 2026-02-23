@@ -99,6 +99,7 @@ function close() {
 /* 內容滾動區 */
 .content {
   flex: 1;
+  height: 100%;
   padding: 0px;
   background: #fff;
   overflow-y:auto;
