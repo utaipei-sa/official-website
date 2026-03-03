@@ -1,11 +1,11 @@
 <script setup>
-import{ ref } from "vue";
+import { ref } from "vue";
 import InfoCard from "./InfoCard.vue";
 import InfoModal from "./InfoModal.vue";
 
-const iframeStyle = `style="width:100%; max-height:500px; border:none; overflow:auto;"`
+const iframeStyle = `style="width:100%; max-height:500px; border:none; overflow:auto;"`;
 const items = [
-  { 
+  {
     title: "學權事件",
     description: "處理進度查詢",
     modalContent: `
@@ -15,13 +15,16 @@ const items = [
         height="100%"
         style="border:none;">
       </iframe>
-    `
+    `,
   },
-    
-  { title: "法規", description: "GitHub 文件", link: "https://github.com/utaipei-sa/regulations" },
-  { 
-    title: "學生議會", 
-    description: "會議紀錄與資料", 
+  {
+    title: "法規",
+    description: "GitHub 文件",
+    link: "https://github.com/utaipei-sa/regulations",
+  },
+  {
+    title: "學生議會",
+    description: "會議紀錄與資料",
     modalContent: `
       <object 
         data="https://example.com/student-council.pdf" 
@@ -30,11 +33,11 @@ const items = [
         height="80vh">
         <p>你的瀏覽器不支援 PDF。請 <a href="https://example.com/student-council.pdf" target="_blank">點此下載 PDF</a></p>
       </object>
-    `
+    `,
   },
-  { 
-    title: "會費相關", 
-    description: "收費與用途", 
+  {
+    title: "會費相關",
+    description: "收費與用途",
     modalContent: `
       <p>只要你是本校在學的大學部學生，你就是學生會的當然會員！</p>
 
@@ -55,11 +58,11 @@ const items = [
 
       <p>這筆會費將用於學生會的活動經費、公共服務與校園建設。<br>
       支持我們，讓每一位同學都能受益，一起打造更好的校園環境！</p>
-    `
+    `,
   },
-  { 
-    title: "預決算書", 
-    description: "財務透明化文件", 
+  {
+    title: "預決算書",
+    description: "財務透明化文件",
     modalContent: `
       <iframe
         src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR-mkjrwlZJgrs_QcIIn1p7QjvuSPI388oa2Nq_q4zMpbQVxY1BCX08NDNRahVzpw/pubhtml?widget=true&amp;headers=false"
@@ -67,13 +70,13 @@ const items = [
         height="100%"
         style="border:none;">
       </iframe>
-    `
+    `,
   },
-  { 
-    title: "素材專區", 
-    description: "素材都在這裡！", 
-    link:"#",
-  }
+  {
+    title: "素材專區",
+    description: "素材都在這裡！",
+    link: "#",
+  },
 ];
 
 //狀態

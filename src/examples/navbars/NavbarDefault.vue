@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink , useRouter} from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { ref, watch } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 
@@ -32,9 +32,7 @@ const props = defineProps({
     route: String,
     color: String,
     label: String,
-    default: () => ({
-
-    })
+    default: () => ({}),
   },
   transparent: {
     type: Boolean,
@@ -224,13 +222,10 @@ watch(
           </li>
 
           <li class="nav-item dropdown dropdown-hover mx-2">
-            <a
-              role="button"
+            <RouterLink
+              :to="{ name: 'activities-calendar' }"
               class="nav-link ps-2 d-flex cursor-pointer align-items-center"
               :class="getTextColor()"
-              id="dropdownMenuDocs"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
             >
               <i
                 class="material-icons opacity-6 me-2 text-md"
@@ -238,21 +233,10 @@ watch(
                 >article</i
               >
               活動行事曆
-            </a>
+            </RouterLink>
            
           </li>
           
-        </ul>
-        <ul class="navbar-nav d-lg-block d-none">
-          <li class="nav-item">
-            <a
-              :href="action.route"
-              class="btn btn-sm mb-0"
-              :class="action.color"
-              onclick="smoothToPricing('pricing-soft-ui')"
-              >{{ action.label }}</a
-            >
-          </li>
         </ul>
       </div>
     </div>
@@ -277,8 +261,10 @@ watch(
     height: auto !important; 
     padding: 0.25rem 0 !important; 
     overflow: hidden !important; 
-
- }
+  }
+  .dropdown-item::after {
+    background-color: transparent !important;
+  }
 }
 .navbar .dropdown-menu {
   background-color: rgba(255, 255, 255, 0.95) !important;
@@ -287,7 +273,6 @@ watch(
   border-radius: 0 !important;
   box-shadow: none !important;
   padding: 0.3rem 0.6rem !important;
-  width: fit-content !important;
   min-width: auto !important;
 }
 .navbar .dropdown-menu::before,
@@ -336,26 +321,19 @@ watch(
 }
 .navbar .dropdown-item:hover,
 .navbar .dropdown-item:focus {
-  background-color: rgba(0, 0, 0, 0.1) !important; 
   color: #333 !important;
 }
 .navbar {
   position: fixed;
   top: 0;
   left: 50%;
-  width:95% !important; 
+  width: 95% !important;
   margin: 2px !important;
   transform: translateX(-50%);
-  border-radius: 0 !important;
   background-color: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(8px);
   z-index: 1000;
   border-radius: 0.75rem !important; /* 添加圓角 */
-}
-.navbar-brand {
-  font-size: 1.4rem !important; 
-  font-weight: 700; 
-  letter-spacing: 0.5px; 
 }
 .dropdown-item::after {
   content: "";
@@ -364,7 +342,7 @@ watch(
   bottom: 0;
   width: 0;
   height: 2px;
-  background: #FFCBFF;
+  background: #ffcbff;
   transition: width 0.3s ease;
 }
 .dropdown-item {
