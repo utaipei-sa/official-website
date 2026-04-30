@@ -30,10 +30,13 @@
           </p>
           <div class="content-divider"></div>
           <div class="modal-content-wrapper">
-            <p
-              class="modal-content"
-              v-html="formatContent(selectedItem.description)"
-            ></p>
+            <div class="modal-content" v-html="selectedItem.description"></div>
+          </div>
+          <div v-if="selectedItem.url">
+            <h5>相關連結</h5>
+            <a :href="attachment.url" target="_blank" rel="noopener noreferrer">
+              請點我
+            </a>
           </div>
         </div>
       </div>
@@ -43,7 +46,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { supabase } from "@/db/supabase";
+import { readItems } from "@directus/sdk";
+import directus from "@/db/directus";
 
 // 響應式資料 (取代原先的 data)
 const activitiesData = ref([]);
@@ -86,25 +90,20 @@ const formatStartEnd = (start, end) => {
   return `${sYear}-${sMonth}-${sDay} ~ ${eYear}-${eMonth}-${eDay}`;
 };
 
-const formatContent = (text) => {
-  // 加上空值保護，避免 text 為空時使用 replace 報錯
-  return text ? text.replaceAll("\n", "<br>") : "";
-};
-
 onMounted(async () => {
-  let { data: activities, error: activityError } = await supabase
-    .from("activities")
-    .select("id,title,start_time,end_time,description")
-    .lte("end_time", new Date().toISOString())
-    .eq("show_in_home", true);
-
-  if (activityError) {
-    console.log(activityError);
-  } else {
-    activitiesData.value = activities
-      .sort((a, b) => new Date(b.end_time) - new Date(a.end_time))
-      .slice(0, 5);
-  }
+  let activities = await directus.request(
+    readItems("activities", {
+      fields: ["title", "start_time", "end_time", "description", "url"],
+      filter: {
+        end_time: {
+          _lte: new Date().toISOString(),
+        },
+      },
+      sort: ["-start_time"],
+      limit: 6,
+    })
+  );
+  activitiesData.value = activities;
 });
 </script>
 
@@ -217,7 +216,7 @@ onMounted(async () => {
 
 .modal-content {
   text-align: left;
-  white-space: pre-line;
+  white-space: normal;
   line-height: 1.6;
   color: #333 !important;
 }

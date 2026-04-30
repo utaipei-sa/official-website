@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
-const  props= defineProps({
+const props = defineProps({
   icon: {
     type: [String, Object],
     default: "",
@@ -17,37 +17,39 @@ const  props= defineProps({
     type: [String, Object],
     default: "",
   },
-  link: {
+  type: {
+    type: String,
+    default: "popup",
+  },
+  link_url: {
     type: String,
     default: "#",
   },
-  modalContent: {
+  content: {
     type: String,
     default: null,
   },
-})
+  collection_name: {
+    type: String,
+    default: null,
+  },
+});
 
-const emit = defineEmits(['click'])
+const emit = defineEmits(["click"]);
 const router = useRouter();
 
 function handleClick() {
-  // 只在沒有 modalContent 時處理 link
-  if (props.modalContent) {
-    emit('click');
+  if (props.type !== "external-link") {
+    emit("click");
     return;
   }
 
-  if (!props.link) return;
-  if (props.link.startsWith("http")) {
-    window.open(props.link, "_blank");
+  if (!props.link_url) return;
+  if (props.link_url.startsWith("http")) {
+    window.open(props.link_url, "_blank");
   } else {
-    router.push(props.link).catch(() => {});
+    router.push(props.link_url).catch(() => {});
   }
-}
-
-function handleClickAndEmit() {
-  //emit('click'); // 打開彈窗
-  handleClick(); // 開外部連結或 router.push
 }
 </script>
 

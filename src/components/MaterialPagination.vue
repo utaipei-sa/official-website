@@ -20,6 +20,6 @@ function getClasses(color, size) {
 </script>
 <template>
   <ul class="pagination" :class="getClasses(color, size)">
-    <slot />
+    <slot></slot>
   </ul>
 </template>
