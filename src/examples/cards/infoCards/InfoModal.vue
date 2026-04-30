@@ -34,13 +34,13 @@ onUnmounted(() => {
   document.body.style.overflow = "";
 });
 
-const props = defineProps({
+defineProps({
   title: String,
-  details: String
-})
-const emit = defineEmits(['close'])
+  details: String,
+});
+const emit = defineEmits(["close"])
 function close() {
-  emit('close')
+  emit("close");
 }
 </script>
 
@@ -112,14 +112,12 @@ function close() {
   font-size: 0.95rem;
   color: #333;
   line-height: 1.6;
-  white-space: pre-line;
+  white-space: normal;
   border-radius: 12px;
   height: calc(100% - 20px);
-  height: calc(100% - 20px);
-  padding: 10px 25px 25px 25px; 
+  padding: 10px 25px 25px 25px;
   flex: 1;
 }
-
 
 /* iframe / PDF 自動縮放置中顯示 */
 .iframe-wrapper {

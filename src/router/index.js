@@ -38,7 +38,7 @@ const router = createRouter({
       component: CalendarView,
     },
     {
-      path: "/pages/landing-pages/about-us",
+      path: "/about-us",
       name: "about",
       component: AboutView,
     },
