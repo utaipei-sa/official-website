@@ -1,12 +1,13 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { readItems } from "@directus/sdk";
 // import page header banner image
 import headerImage from "./assets/img/活動行事曆橫幅.jpg";
 
 import NavbarDefault from "../../examples/navbars/NavbarDefault.vue";
 import DefaultFooter from "../../examples/footers/FooterDefault.vue";
 import ActivityCard from "./components/ActivityCard.vue";
-import { supabase } from "../../db/supabase";
+import directus from "@/db/directus";
 
 // sample events
 const events = ref([]);
@@ -251,23 +252,18 @@ const nextUpcoming = computed(() => {
 onMounted(async () => {
   window.scrollTo(0, 0);
 
-  const { data, error } = await supabase
-    .from("activities")
-    .select("id,title,start_time,description,location,url,tag");
+  const data = await directus.request(readItems("activities"));
 
-  if (error) {
-    console.error(error);
-  } else {
-    for (const element of data) {
-      element.date = isoDate(new Date(element.start_time));
+  for (const element of data) {
+    element.date = isoDate(new Date(element.start_time));
 
-      const startTime = new Date(element.start_time);
-      const hours = String(startTime.getHours()).padStart(2, "0");
-      const minutes = String(startTime.getMinutes()).padStart(2, "0");
-      element.time = `${hours}:${minutes}`;
-    }
-    events.value = data;
+    const startTime = new Date(element.start_time);
+    const hours = String(startTime.getHours()).padStart(2, "0");
+    const minutes = String(startTime.getMinutes()).padStart(2, "0");
+    element.time = `${hours}:${minutes}`;
   }
+  events.value = data;
+
   console.log(events.value);
 });
 </script>
@@ -469,10 +465,7 @@ onMounted(async () => {
                     <div class="text-sm text-muted">
                       {{ ev.time }} • {{ ev.location }}
                     </div>
-                    <div
-                      class="text-sm mt-1"
-                      v-html="formatContent(ev.description)"
-                    ></div>
+                    <div class="text-sm mt-1" v-html="ev.description"></div>
                   </div>
                   <div>
                     <span class="badge event-category-badge">{{ ev.tag }}</span>

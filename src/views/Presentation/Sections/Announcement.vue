@@ -6,16 +6,38 @@
           <span>最新公告</span>
         </div>
         <div class="header-divider"></div>
-        
+
         <div class="activity-list">
           <div
             class="activity-item"
-            v-for="(item, index) in announcementsData"
+            v-for="(item, index) in paginatedAnnouncements"
             :key="index"
             @click="openModal(item)"
           >
-            <strong>{{ formatDate(item.created_at) }} {{ item.title }}</strong>
+            <strong>{{ formatDate(item.updated_at) }} {{ item.title }}</strong>
           </div>
+        </div>
+        <div
+          v-if="announcementsData.length > 0"
+          class="d-flex justify-content-center mt-3"
+        >
+          <button
+            class="btn btn-sm btn-outline-primary me-2"
+            @click="prevPage"
+            :disabled="currentPage === 0"
+          >
+            上一頁
+          </button>
+          <p class="align-self-center">
+            {{ currentPage + 1 }} / {{ totalPages }}
+          </p>
+          <button
+            class="btn btn-sm btn-outline-primary ms-2"
+            @click="nextPage"
+            :disabled="currentPage >= totalPages - 1"
+          >
+            下一頁
+          </button>
         </div>
       </div>
     </div>
@@ -25,27 +47,19 @@
       <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
         <div class="modal-box">
           <h3>{{ selectedItem.title }}</h3>
-          <p style="color: #666">
-            發布時間：{{ formatDate(selectedItem.created_at) }}
-          </p>
           <div class="content-divider"></div>
           <div class="modal-content-wrapper">
             <div class="modal-content">
-              <p>發布單位：{{ selectedItem.department }}</p>
-              <p v-html="formatContent(selectedItem.content)"></p>
-              <br />
-              <div v-for="image in selectedItem.images" :key="image">
-                <img
-                  :src="image"
-                  style="width: 100%; max-width: 600px"
-                  alt="附圖"
-                />
-              </div>
+              <p>
+                發布時間：{{ formatDate(selectedItem.updated_at) }}
+                <br />
+                發布單位：{{ selectedItem.author }}
+              </p>
+              <div v-html="selectedItem.content"></div>
               <div v-if="selectedItem.attachments">
                 <h5>附件</h5>
-                <ul class="list-group">
+                <ul>
                   <li
-                    class="list-group-item"
                     v-for="(attachment, index) in selectedItem.attachments"
                     :key="attachment"
                   >
@@ -68,14 +82,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { supabase } from "@/db/supabase";
+import { ref, computed, onMounted } from "vue";
+import { readItems, readFile } from "@directus/sdk";
+import directus from "@/db/directus";
 
 // 響應式資料 (取代原先的 data)
 const announcementsData = ref([]);
 
 const showModal = ref(false);
 const selectedItem = ref({});
+
+const currentPage = ref(0);
+const itemsPerPage = 10;
+
+const paginatedAnnouncements = computed(() => {
+  const start = currentPage.value * itemsPerPage;
+  const end = start + itemsPerPage;
+  return announcementsData.value.slice(start, end);
+});
+
+const totalPages = computed(() =>
+  Math.ceil(announcementsData.value.length / itemsPerPage)
+);
+
+function nextPage() {
+  if (currentPage.value < totalPages.value - 1) {
+    currentPage.value++;
+  }
+}
+
+function prevPage() {
+  if (currentPage.value > 0) {
+    currentPage.value--;
+  }
+}
 
 // 方法 (取代原先的 methods)
 const openModal = (item) => {
@@ -96,22 +136,67 @@ const formatDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-const formatContent = (text) => {
-  return text ? text.replaceAll("\n", "<br>") : "";
-};
-
 onMounted(async () => {
-  let { data: announcements, error: announcementError } = await supabase
-    .from("announcements")
-    .select("id,title,content,images,attachments,department,created_at");
+  let announcement = await directus.request(
+    readItems("posts", {
+      sort: ["-updated_at"],
+    })
+  );
 
-  if (announcementError) {
-    console.log(announcementError);
-  } else {
-    announcementsData.value = announcements
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      .slice(0, 15);
-  }
+  // 外層加上 await Promise.all，並把 map 內的 callback 變成 async
+  const resolvedAnnouncements = await Promise.all(
+    announcement.map(async (item) => {
+      let resolvedAttachments = [];
+
+      // 檢查確保 attachments 存在且是陣列，避免報錯
+      if (item.attachments && item.attachments.length > 0) {
+        // 內層的 attachments 也用 await Promise.all 等待完成
+        resolvedAttachments = await Promise.all(
+          item.attachments.map(async (attachmentId) => {
+            let attachmentFileId = await directus.request(
+              readItems("posts_files", {
+                filter: {
+                  id: {
+                    _eq: attachmentId,
+                  },
+                },
+                fields: ["directus_files_id"],
+              })
+            );
+
+            // 提取出正確的檔案 ID 字串
+            let fileId = attachmentFileId[0].directus_files_id;
+
+            let attachmentFileName = await directus.request(
+              readFile(fileId, {
+                fields: ["filename_download"],
+              })
+            );
+
+            return {
+              id: attachmentId,
+              name: attachmentFileName.filename_download,
+              // 使用正確的 fileId
+              url: `${import.meta.env.VITE_DIRECTUS_URL}/assets/${fileId}`,
+            };
+          })
+        );
+      }
+
+      return {
+        id: item.id,
+        title: item.title,
+        content: item.content,
+        updated_at: item.updated_at,
+        author: item.author,
+        // 放進去的是已經解析完畢的 Object 陣列
+        attachments: resolvedAttachments,
+      };
+    })
+  );
+
+  // 將處理好的資料賦值給 ref
+  announcementsData.value = resolvedAnnouncements;
 });
 </script>
 
@@ -220,7 +305,7 @@ onMounted(async () => {
 
 .modal-content {
   text-align: left;
-  white-space: pre-line;
+  white-space: normal;
   line-height: 1.6;
   color: #333 !important;
 }

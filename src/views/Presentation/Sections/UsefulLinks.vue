@@ -10,7 +10,7 @@
         <div class="activity-list">
           <div
             class="activity-item"
-            v-for="(item, index) in usefulLinks"
+            v-for="(item, index) in usefulLinksData"
             :key="index"
           >
             <a
@@ -18,7 +18,7 @@
               target="_blank"
               style="font-weight: bold; text-decoration: none"
             >
-              {{ item.name }}
+              {{ item.title }}
             </a>
           </div>
         </div>
@@ -29,20 +29,19 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { supabase } from "@/db/supabase";
+import { readItems } from "@directus/sdk";
+import directus from "@/db/directus";
 
 // 使用 ref 定義響應式資料 (取代原先的 data)
-const usefulLinks = ref([]);
+const usefulLinksData = ref([]);
 
 onMounted(async () => {
-  let { data: links, error: linkError } = await supabase
-    .from("commonlinks")
-    .select("*");
-  if (linkError) {
-    console.log(linkError);
-  } else {
-    usefulLinks.value = links;
-  }
+  let usefulLinks = await directus.request(
+    readItems("useful_links", {
+      sort: ["priority"],
+    })
+  );
+  usefulLinksData.value = usefulLinks;
 });
 </script>
 
