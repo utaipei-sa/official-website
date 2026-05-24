@@ -34,7 +34,7 @@
           </div>
           <div v-if="selectedItem.url">
             <h5>相關連結</h5>
-            <a :href="attachment.url" target="_blank" rel="noopener noreferrer">
+            <a :href="selectedItem.url" target="_blank" rel="noopener noreferrer">
               請點我
             </a>
           </div>
