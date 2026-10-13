@@ -20,7 +20,7 @@ import DefaultInfoCard from "../../../../examples/cards/infoCards/DefaultInfoCar
         <img src="@/assets/img/structure.jpg" />
       </div>
       <div class="row g-4 mt-6 mb-4">
-        <h2 class="title-shift">學生會</h2>
+        <h2 class="w-auto title-shift">學生會</h2>
         <div
           class="row mt-6 align-items-stretch justify-content-center text-center"
         >
@@ -89,7 +89,7 @@ import DefaultInfoCard from "../../../../examples/cards/infoCards/DefaultInfoCar
         />
       </div>
       <div class="row g-4 mt-6 mb-4">
-        <h2 class="title-shift">學生議會</h2>
+        <h2 class="w-auto title-shift">學生議會</h2>
         <div
           class="row mt-6 align-items-stretch justify-content-center text-center"
         >
@@ -233,5 +233,4 @@ import DefaultInfoCard from "../../../../examples/cards/infoCards/DefaultInfoCar
 .no-wrap {
   white-space: nowrap;
 }
-
 </style>

@@ -30,13 +30,19 @@
           </p>
           <div class="content-divider"></div>
           <div class="modal-content-wrapper">
-            <div class="modal-content" v-html="selectedItem.description"></div>
-          </div>
-          <div v-if="selectedItem.url">
-            <h5>相關連結</h5>
-            <a :href="selectedItem.url" target="_blank" rel="noopener noreferrer">
-              請點我
-            </a>
+            <div class="modal-content">
+              <div v-html="selectedItem.description || '本活動無詳細資訊'"></div>
+              <div v-if="selectedItem.url">
+                <h5>相關連結</h5>
+                <a
+                  :href="selectedItem.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  請點我
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

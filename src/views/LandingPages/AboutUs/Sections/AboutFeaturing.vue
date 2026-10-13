@@ -10,7 +10,7 @@ import CenteredBlogCard from "../../../../examples/cards/blogCards/CenteredBlogC
   <section class="pt-4 pb-6" id="resources">
     <div class="container">
       <div class="row mt-4 mb-4">
-        <h2 class="title-shift">素材專區</h2>
+        <h2 class="w-auto title-shift">素材專區</h2>
         <div
           class="row mt-6 align-items-stretch justify-content-center text-center"
         >
