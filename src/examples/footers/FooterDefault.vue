@@ -1,6 +1,6 @@
 <script setup>
-import logoDark from "@/assets/img/UTSAicon_ResizeImage.png";
-import logoWhite from "@/assets/img/logo2.png";
+import logoDark from "@/assets/img/13th/logo_text_nobg.png";
+import logoWhite from "@/assets/img/logo2_nobg.png";
 defineProps({
   brands: {
     type: Array,
@@ -10,13 +10,13 @@ defineProps({
     default: () => [
       {
         name: "臺北市立大學學生會",
-        en: "UTSA 12th",
+        en: "UTSA 13th",
         logo: logoDark,
         route: "/",
       },
       {
         name: "臺北市立大學學生議會",
-        en: "UTSP 12th",
+        en: "UTSP 13th",
         logo: logoWhite,
         route: "/",
       },
@@ -31,7 +31,7 @@ defineProps({
       href: String,
     },
     default: () => [
-      {
+      /*{
         name: "",
         items: [
           {
@@ -48,7 +48,7 @@ defineProps({
             // href: "utsa@go.utaipei.edu.tw"
           },
         ],
-      },
+      },*/
       {
         name: "會辦位置",
         items: [
@@ -72,11 +72,15 @@ defineProps({
           {
             name: "IG : @utaipei_sa",
             href: "https://www.instagram.com/utaipei_sa/",
-          }
-        ]
-      }
-    ]
-  }
+          },
+          {
+            name: "FB : @Utaipeisa2.0",
+            href: "https://www.facebook.com/Utaipeisa2.0/",
+          },
+        ],
+      },
+    ],
+  },
 });
 </script>
 <template>
@@ -84,7 +88,7 @@ defineProps({
     <div class="container">
       <div class="row">
         <div
-          class="col-md-2 col-sm-6 col-6 mb-4"
+          class="col-xl-3 col-md-6 col-12 mb-4"
           v-for="brand in brands"
           :key="brand.name"
         >
@@ -95,7 +99,7 @@ defineProps({
         </div>
 
         <div
-          class="col-md-2 col-sm-6 col-6 mb-4"
+          class="col-xl-3 col-md-6 col-12 mb-4"
           v-for="{ name, items } of menus"
           :key="name"
         >

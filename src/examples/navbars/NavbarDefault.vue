@@ -5,15 +5,15 @@ import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
-import downArrow from "@/assets/img/down-arrow.svg";
+// import downArrow from "@/assets/img/down-arrow.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
 import NavbarImage from "@/assets/img/UTSAicon_NavbarImage.png";
 const router = useRouter();
 
 function scrollToIntro() {
   // 如果不在首頁，先跳回首頁
-  if (router.currentRoute.value.name !== 'presentation') {
-    router.push({ name: 'presentation' }).then(() => {
+  if (router.currentRoute.value.name !== "presentation") {
+    router.push({ name: "presentation" }).then(() => {
       // 等頁面渲染完再滾動
       setTimeout(() => {
         const el = document.getElementById("intro");
@@ -190,7 +190,16 @@ watch(
               <div class="row d-none d-lg-block">
                 <div class="col-12 px-2 py-2">
                   <RouterLink
-                    :to="{ name: 'about' }"
+                    :to="{ name: 'about', query: { term: '13' } }"
+                    class="dropdown-item border-radius-md"
+                    :class="getTextColor()"
+                  >
+                    <span>第十三屆學生會</span>
+                  </RouterLink>
+                </div>
+                <div class="col-12 px-2 py-2">
+                  <RouterLink
+                    :to="{ name: 'about', query: { term: '12' } }"
                     class="dropdown-item border-radius-md"
                     :class="getTextColor()"
                   >
@@ -201,7 +210,14 @@ watch(
 
               <div class="d-lg-none">
                 <RouterLink
-                  :to="{ name: 'about' }"
+                  :to="{ name: 'about', query: { term: '13' } }"
+                  class="dropdown-item border-radius-md"
+                  :class="getTextColor()"
+                >
+                  <span>第十三屆學生會</span>
+                </RouterLink>
+                <RouterLink
+                  :to="{ name: 'about', query: { term: '12' } }"
                   class="dropdown-item border-radius-md"
                   :class="getTextColor()"
                 >
@@ -209,7 +225,7 @@ watch(
                 </RouterLink>
               </div>
             </div>
-          </li>       
+          </li>
           <li class="nav-item mx-2">
             <a
               class="nav-link ps-2 d-flex cursor-pointer align-items-center"
