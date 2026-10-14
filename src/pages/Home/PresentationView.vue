@@ -144,6 +144,7 @@ section {
 
 .text span {
   display: inline-block;
+  color: #003d79;
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.8s ease-out;
@@ -171,5 +172,28 @@ section {
 .content.show {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .custom-shadow {
+    margin-right: 0.75rem !important;
+    margin-left: 0.75rem !important;
+    padding: 1.25rem 0.75rem;
+  }
+
+  section {
+    padding: 2rem 0.25rem;
+  }
+
+  .text {
+    display: block;
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  .content {
+    font-size: 1rem;
+    line-height: 1.8;
+    text-align: left;
+  }
 }
 </style>

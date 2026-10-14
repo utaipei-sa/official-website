@@ -104,7 +104,7 @@ function handleClick() {
   font-weight: 700;
   text-align: center;
   width: 100%;
-  font-size: clamp(14px, 2vw, 20px);
+  font-size: clamp(16px, 2.5vw, 20px);
   transform-origin: center;
 }
 
@@ -118,7 +118,7 @@ function handleClick() {
 
 /* === 描述文字：與標題同大小，可換行 === */
 .description-text {
-  font-size: clamp(14px, 2vw, 20px);
+  font-size: clamp(16px, 2.5vw, 20px);
   line-height: 1.5;
   white-space: normal;
   overflow-wrap: break-word;

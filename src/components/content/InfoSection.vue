@@ -1,27 +1,23 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { readItems } from "@directus/sdk";
 import InfoCard from "@/components/content/InfoCard.vue";
-import InfoModal from "@/components/content/InfoModal.vue";
 
 import directus from "@/services/directus";
 
 // const iframeStyle = `style="width:100%; max-height:500px; border:none; overflow:auto;"`;
 const items = ref([]);
-
-//狀態
-const showModal = ref(false);
-const selectedItem = ref(null);
+const router = useRouter();
 
 //開啟彈窗
-function openModal(item) {
-  selectedItem.value = item;
-  showModal.value = true;
-}
-//關閉彈窗
-function closeModal() {
-  selectedItem.value = null;
-  showModal.value = false;
+function openDetail(item) {
+  if (item.id) {
+    router.push({
+      name: "content-detail",
+      params: { type: "public", id: item.id },
+    });
+  }
 }
 
 onMounted(async () => {
@@ -48,19 +44,12 @@ onMounted(async () => {
           v-bind="item"
           @click="
             item.type === 'popup' || item.type === 'collection'
-              ? openModal(item)
+              ? openDetail(item)
               : null
           "
         />
       </div>
     </div>
-
-    <InfoModal
-      v-if="showModal"
-      :title="selectedItem?.title"
-      :details="selectedItem?.content"
-      @close="closeModal"
-    />
   </section>
 </template>
 
@@ -123,7 +112,7 @@ onMounted(async () => {
 }
 
 /* ===  手機畫面保持等高 === */
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
   .cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -145,6 +134,14 @@ onMounted(async () => {
     white-space: normal;
     word-break: break-word;
     line-height: 1.3;
+  }
+
+  .info-container {
+    padding: 0 0.25rem;
+  }
+
+  .section-title {
+    margin-bottom: 1.5rem;
   }
 }
 </style>

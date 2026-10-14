@@ -12,7 +12,7 @@
             class="activity-item"
             v-for="(item, index) in paginatedAnnouncements"
             :key="index"
-            @click="openModal(item)"
+            @click="openDetail(item)"
           >
             <strong>{{ formatDate(item.updated_at) }} {{ item.title }}</strong>
           </div>
@@ -42,55 +42,18 @@
       </div>
     </div>
   </div>
-  <Teleport to="body">
-    <transition name="fade">
-      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-        <div class="modal-box">
-          <h3>{{ selectedItem.title }}</h3>
-          <div class="content-divider"></div>
-          <div class="modal-content-wrapper">
-            <div class="modal-content">
-              <p>
-                發布時間：{{ formatDate(selectedItem.updated_at) }}
-                <br />
-                發布單位：{{ selectedItem.author }}
-              </p>
-              <div v-html="selectedItem.content"></div>
-              <div v-if="selectedItem.attachments">
-                <h5>附件</h5>
-                <ul>
-                  <li
-                    v-for="(attachment, index) in selectedItem.attachments"
-                    :key="attachment"
-                  >
-                    <a
-                      :href="attachment.url"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {{ attachment.name || `附件 ${index + 1}` }}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
-  </Teleport>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { fetchAnnouncements } from "@/services/content";
 import { formatDate } from "@/utils/date";
 
 // 響應式資料 (取代原先的 data)
 const announcementsData = ref([]);
 
-const showModal = ref(false);
-const selectedItem = ref({});
+const router = useRouter();
 
 const currentPage = ref(0);
 const itemsPerPage = 10;
@@ -118,13 +81,11 @@ function prevPage() {
 }
 
 // 方法 (取代原先的 methods)
-const openModal = (item) => {
-  selectedItem.value = item;
-  showModal.value = true;
-};
-
-const closeModal = () => {
-  showModal.value = false;
+const openDetail = (item) => {
+  router.push({
+    name: "content-detail",
+    params: { type: "announcement", id: item.id },
+  });
 };
 
 onMounted(async () => {
@@ -175,6 +136,9 @@ onMounted(async () => {
   font-size: 20px;
   color: #37526d;
   cursor: pointer; /* 增加鼠標指標，提示可點擊 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .activity-item:hover {
@@ -193,70 +157,23 @@ onMounted(async () => {
   );
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  /* 關鍵修改：移除 flex 居中屬性，讓 modal-box 獨立定位 */
-  display: flex; /* 強制覆蓋任何可能的 display 設置 */
-  align-items: center; /* 強制垂直居中 */
-  justify-content: center; /* 強制水平居中 */
-  z-index: 999;
-}
-
-/* 彈窗主體樣式：修改為居中定位 */
-.modal-box {
-  position: relative;
-  /* top: auto !important;
-  left: auto !important;
-  margin: 0 !important; 
-  transform: none !important; */
-
-  background: white;
-  padding: 24px 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  width: 85%;
-  max-width: 70%; /* 增加 max-width 提升可讀性 */
-  max-height: 70vh; /* 確保內容不會超出視窗 */
-  min-height: 350px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  top: auto;
-  left: auto;
-  transform: none;
-}
-
-.modal-content-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  margin: 12px 0;
-  text-align: center;
-}
-
-.modal-content {
-  text-align: left;
-  white-space: normal;
-  line-height: 1.6;
-  color: #333 !important;
-}
-
-.modal-content p {
-  font-weight: 400 !important;
-}
-
-.content-divider {
-  width: 100%;
-  height: 1px;
-  background-color: #ffcbff;
-}
-
 .list-group {
   font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .activity-header span {
+    font-size: clamp(1.6rem, 8vw, 2rem);
+  }
+
+  .activity-item {
+    font-size: clamp(1rem, 4.2vw, 1.25rem);
+    line-height: 1.55;
+  }
 }
 </style>

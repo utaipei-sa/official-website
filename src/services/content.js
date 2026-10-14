@@ -1,4 +1,4 @@
-import { readFile, readItems } from "@directus/sdk";
+import { readFile, readItem, readItems } from "@directus/sdk";
 import directus from "@/services/directus";
 
 const directusUrl = import.meta.env.VITE_DIRECTUS_URL;
@@ -16,6 +16,19 @@ export async function fetchAnnouncements() {
       attachments: await resolvePostAttachments(post.attachments),
     }))
   );
+}
+
+export async function fetchAnnouncement(id) {
+  const post = await directus.request(
+    readItem("posts", id, {
+      fields: ["*", "attachments"],
+    })
+  );
+
+  return {
+    ...post,
+    attachments: await resolvePostAttachments(post.attachments),
+  };
 }
 
 async function resolvePostAttachments(attachmentIds = []) {
@@ -65,14 +78,30 @@ export function fetchActivities() {
 export function fetchHistoricalActivities() {
   return directus.request(
     readItems("activities", {
-      fields: ["title", "start_time", "end_time", "description", "url"],
+      fields: ["id", "title", "start_time", "end_time", "description", "url"],
       filter: {
         end_time: {
           _lte: new Date().toISOString(),
         },
       },
       sort: ["-start_time"],
-      limit: 6,
+      limit: 5,
+    })
+  );
+}
+
+export function fetchHistoricalActivity(id) {
+  return directus.request(
+    readItem("activities", id, {
+      fields: ["title", "start_time", "end_time", "description", "url"],
+    })
+  );
+}
+
+export function fetchPublicInformation(id) {
+  return directus.request(
+    readItem("public_data", id, {
+      fields: ["*"],
     })
   );
 }

@@ -11,7 +11,7 @@
             class="activity-item"
             v-for="(item, index) in activitiesData"
             :key="index"
-            @click="openModal(item)"
+            @click="openDetail(item)"
           >
             <strong>{{ formatDate(item.start_time) }} {{ item.title }}</strong>
           </div>
@@ -19,63 +19,27 @@
       </div>
     </div>
   </div>
-
-  <Teleport to="body">
-    <transition name="fade">
-      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-        <div class="modal-box">
-          <h3>{{ selectedItem.title }}</h3>
-          <p style="color: #666">
-            {{ formatStartEnd(selectedItem.start_time, selectedItem.end_time) }}
-          </p>
-          <div class="content-divider"></div>
-          <div class="modal-content-wrapper">
-            <div class="modal-content">
-              <div
-                v-html="selectedItem.description || '本活動無詳細資訊'"
-              ></div>
-              <div v-if="selectedItem.url">
-                <h5>相關連結</h5>
-                <a
-                  :href="selectedItem.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  請點我
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
-  </Teleport>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { fetchHistoricalActivities } from "@/services/content";
-import { formatDate, formatDateRange } from "@/utils/date";
+import { formatDate } from "@/utils/date";
 
 // 響應式資料 (取代原先的 data)
 const activitiesData = ref([]);
 
-const showModal = ref(false);
-const selectedItem = ref({});
+const router = useRouter();
 
 // 方法 (取代原先的 methods)
 // 🌟 移除 event 參數和手動定位邏輯 🌟
-const openModal = (item) => {
-  selectedItem.value = item;
-  showModal.value = true;
+const openDetail = (item) => {
+  router.push({
+    name: "content-detail",
+    params: { type: "activity", id: item.id },
+  });
 };
-
-const closeModal = () => {
-  showModal.value = false;
-  // 🌟 移除 modalPosition 的重置 🌟
-};
-
-const formatStartEnd = formatDateRange;
 
 onMounted(async () => {
   try {
@@ -124,6 +88,9 @@ onMounted(async () => {
   font-size: 20px;
   color: #37526d;
   cursor: pointer; /* 增加鼠標指標，提示可點擊 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .activity-item:hover {
@@ -142,69 +109,19 @@ onMounted(async () => {
   );
 }
 
-/* ---------------------------------------------------- */
-/* 彈窗部分：實現 Flexbox 居中、調整尺寸和內邊距 */
-/* ---------------------------------------------------- */
+@media (max-width: 768px) {
+  .container {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  /* 🌟 關鍵：使用 Flexbox 居中 🌟 */
-  display: flex;
-  align-items: center; /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
-  z-index: 999;
-}
+  .activity-header span {
+    font-size: clamp(1.6rem, 8vw, 2rem);
+  }
 
-.modal-box {
-  position: relative;
-  /* top: auto !important;
-  left: auto !important;
-  margin: 0 !important; 
-  transform: none !important; */
-
-  background: white;
-  padding: 24px 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  width: 85%;
-  max-width: 70%; /* 增加 max-width 提升可讀性 */
-  max-height: 70vh; /* 確保內容不會超出視窗 */
-  min-height: 350px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  top: auto;
-  left: auto;
-  transform: none;
-}
-
-.modal-content-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  margin: 12px 0;
-  text-align: center;
-}
-
-.modal-content {
-  text-align: left;
-  white-space: normal;
-  line-height: 1.6;
-  color: #333 !important;
-}
-
-.modal-content p {
-  font-weight: 400 !important;
-}
-
-.content-divider {
-  width: 100%;
-  height: 1px;
-  background-color: #ffcbff;
+  .activity-item {
+    font-size: clamp(1rem, 4.2vw, 1.25rem);
+    line-height: 1.55;
+  }
 }
 </style>

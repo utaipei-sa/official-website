@@ -97,4 +97,20 @@ onMounted(async () => {
     transparent 100%
   );
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .activity-header span {
+    font-size: clamp(1.6rem, 8vw, 2rem);
+  }
+
+  .activity-item {
+    font-size: clamp(1rem, 4.2vw, 1.25rem);
+    line-height: 1.55;
+  }
+}
 </style>

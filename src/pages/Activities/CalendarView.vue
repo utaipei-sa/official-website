@@ -243,8 +243,6 @@ const nextUpcoming = computed(() => {
 });
 
 onMounted(async () => {
-  window.scrollTo(0, 0);
-
   try {
     const data = await fetchActivities();
 

@@ -229,7 +229,10 @@ watch(
                     :to="{ name: 'about', query: { term: '13' } }"
                     class="dropdown-item border-radius-md"
                     :class="getTextColor()"
-                    @click="closeMenus"
+                    @click="
+                      closeMenus();
+                      scrollToTop();
+                    "
                   >
                     <span>第十三屆學生會</span>
                   </RouterLink>
@@ -239,7 +242,10 @@ watch(
                     :to="{ name: 'about', query: { term: '12' } }"
                     class="dropdown-item border-radius-md"
                     :class="getTextColor()"
-                    @click="closeMenus"
+                    @click="
+                      closeMenus();
+                      scrollToTop();
+                    "
                   >
                     <span>第十二屆學生會</span>
                   </RouterLink>
@@ -251,7 +257,10 @@ watch(
                   :to="{ name: 'about', query: { term: '13' } }"
                   class="dropdown-item border-radius-md"
                   :class="getTextColor()"
-                  @click="closeMenus"
+                  @click="
+                    closeMenus();
+                    scrollToTop();
+                  "
                 >
                   <span>第十三屆學生會</span>
                 </RouterLink>
@@ -259,7 +268,10 @@ watch(
                   :to="{ name: 'about', query: { term: '12' } }"
                   class="dropdown-item border-radius-md"
                   :class="getTextColor()"
-                  @click="closeMenus"
+                  @click="
+                    closeMenus();
+                    scrollToTop();
+                  "
                 >
                   <span>第十二屆學生會</span>
                 </RouterLink>
@@ -286,7 +298,10 @@ watch(
               :to="{ name: 'activities-calendar' }"
               class="nav-link ps-2 d-flex cursor-pointer align-items-center"
               :class="getTextColor()"
-              @click="closeMenus"
+              @click="
+                closeMenus();
+                scrollToTop();
+              "
             >
               <i
                 class="material-icons opacity-6 me-2 text-md"
