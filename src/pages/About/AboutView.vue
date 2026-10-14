@@ -79,7 +79,7 @@ watch(
     </template>
 
     <template #default>
-      <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+      <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 about-content">
         <Information_13th v-if="term === '13'" />
         <Information v-else-if="term === '12'" />
         <!--<AboutTeam />-->
@@ -89,3 +89,14 @@ watch(
     </template>
   </AppLayout>
 </template>
+
+<style scoped>
+@media (max-width: 600px) {
+  .about-content {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+}
+</style>

@@ -29,7 +29,7 @@ defineProps({
             {{ groupIndex === 0 ? "學生會" : "學生議會" }}
           </h2>
           <div
-            class="row mt-6 align-items-stretch justify-content-center text-center"
+            class="row mt-6 mx-auto align-items-stretch justify-content-center text-center"
           >
             <div
               v-for="leader in group.leaders"
@@ -140,5 +140,35 @@ defineProps({
   line-height: 2;
   margin: 0 auto;
   max-width: 450px;
+}
+
+@media (max-width: 600px) {
+  .head-card {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0;
+  }
+
+  .head-frame {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .head-name {
+    font-size: 1.25rem;
+  }
+
+  .title-shift {
+    margin-left: 0;
+  }
+
+  .context-shift {
+    padding: 0 0.5rem;
+  }
+
+  .team-card {
+    width: 100%;
+  }
 }
 </style>

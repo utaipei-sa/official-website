@@ -57,11 +57,7 @@ defineProps({
   font-size: 1rem; /* 文字縮小、簡化 */
   line-height: 1.3;
   color: #555; /* 顏色淺一點 */
-  overflow: hidden; /* 避免太長撐高 */
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  /*-webkit-line-clamp: 2; /* 最多兩行 */
-  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 600px) {

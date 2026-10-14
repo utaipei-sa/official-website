@@ -279,7 +279,7 @@ onMounted(async () => {
               class="box text-center mx-auto rounded"
               style="max-width: 400px; border-radius: 0.75rem; opacity: 0.9"
             >
-              <h2 class="mb-1 mt-10 text-primary">學生會活動行事曆</h2>
+              <h2 class="mb-1 mt-7 text-primary">學生會活動行事曆</h2>
               <p class="lead opacity-8 text-bold">學生會活動攏佇遮~</p>
             </div>
           </div>
@@ -328,7 +328,7 @@ onMounted(async () => {
                     class="mx-auto d-flex align-items-baseline month-year-controls"
                   >
                     <button
-                      class="btn btn-sm btn-outline-dark control-btn me-2"
+                      class="btn btn-sm btn-outline-dark control-btn prev-month-btn me-2"
                       @click="prevMonth"
                       aria-label="上個月"
                     >
@@ -359,14 +359,14 @@ onMounted(async () => {
                       </select>
                     </div>
                     <button
-                      class="btn btn-sm btn-outline-dark control-btn ms-2"
+                      class="btn btn-sm btn-outline-dark control-btn next-month-btn ms-2"
                       @click="nextMonth"
                       aria-label="下個月"
                     >
                       ›
                     </button>
                     <button
-                      class="btn btn-sm btn-primary ms-3"
+                      class="btn btn-sm btn-primary today-btn ms-3"
                       @click="goToToday"
                       aria-label="回到今日"
                     >
@@ -871,7 +871,61 @@ onMounted(async () => {
     min-width: 64px;
     font-size: 0.85rem;
   }
+
+  .card > .d-flex:has(.month-year-controls) {
+    display: block !important;
+  }
+
+  .month-year-controls {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
+    grid-template-rows: auto auto;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .month-year-controls .selectors {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-content: center;
+    min-width: 0;
+    margin: 0 !important;
+  }
+
+  .month-year-controls .prev-month-btn {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0 !important;
+  }
+
+  .month-year-controls .next-month-btn {
+    grid-column: 3;
+    grid-row: 2;
+    margin: 0 !important;
+  }
+
+  .month-year-controls .today-btn {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: center;
+    margin: 0 !important;
+    white-space: nowrap;
+    width: 100%;
+  }
 }
+
+/*@media (max-width: 400px) {
+  .month-year-controls {
+    grid-template-rows: auto auto auto;
+  }
+
+  .month-year-controls .today-btn {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    width: 100%;
+  }
+}*/
 
 /* selected day highlight */
 .selected-day .cell-content {

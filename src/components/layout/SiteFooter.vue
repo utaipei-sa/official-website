@@ -124,4 +124,31 @@ defineProps({
   object-fit: contain; /* 確保圖片不被壓縮 */
   display: block;
 }
+
+@media (max-width: 767.98px) {
+  .footer .container {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .footer .row {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer .col-12 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer .nav {
+    align-items: center;
+    margin-left: 0;
+  }
+
+  .footer .nav-link {
+    white-space: normal !important;
+  }
+}
 </style>

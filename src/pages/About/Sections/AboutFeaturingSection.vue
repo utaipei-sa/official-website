@@ -15,7 +15,7 @@ defineProps({
       <div class="row mt-4 mb-4">
         <h2 class="w-auto title-shift">素材專區</h2>
         <div
-          class="row mt-6 align-items-stretch justify-content-center text-center"
+          class="row mt-6 mx-auto align-items-stretch justify-content-center text-center"
         >
           <div
             v-for="resource in resources"
