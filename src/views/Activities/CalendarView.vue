@@ -4,8 +4,7 @@ import { readItems } from "@directus/sdk";
 // import page header banner image
 import headerImage from "./assets/img/活動行事曆橫幅.jpg";
 
-import NavbarDefault from "../../examples/navbars/NavbarDefault.vue";
-import DefaultFooter from "../../examples/footers/FooterDefault.vue";
+import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import ActivityCard from "./components/ActivityCard.vue";
 import directus from "@/db/directus";
 
@@ -269,24 +268,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    class="container position-fixed z-index-sticky"
-    style="
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 100%;
-    "
-  >
-    <div class="row">
-      <div class="col-12">
-        <NavbarDefault :sticky="false" />
-      </div>
-    </div>
-  </div>
-
-  <div>
+  <DefaultLayout>
+    <template #default>
+      <div>
     <div class="page-header min-vh-25"
       :style="{ background:`linear-gradient(#ffffff99), url('${headerImage}')`, backgroundSize: 'cover', backgroundPosition: 'center' }">
       <div class="container py-5">
@@ -549,10 +533,9 @@ onMounted(async () => {
     </transition>
     <div class="mobile-drawer-backdrop" v-show="selectedDay" @click="selectedDay = null"></div>
 
-    <div class="mt-5">
-      <DefaultFooter />
-    </div>
-  </div>
+      </div>
+    </template>
+  </DefaultLayout>
 </template>
 
 <style scoped>

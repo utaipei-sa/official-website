@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 defineProps({
   image: {
     type: String,

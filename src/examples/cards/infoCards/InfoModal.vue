@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <Teleport to="body">
     <div class="modal-backdrop" @click.self="close">
       <div class="modal-content">

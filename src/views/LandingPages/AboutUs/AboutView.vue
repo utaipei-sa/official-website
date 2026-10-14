@@ -1,10 +1,7 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from "vue";
 import { useRoute } from 'vue-router';
-
-//example components
-import NavbarDefault from "@/examples/navbars/NavbarDefault.vue";
-import DefaultFooter from "@/examples/footers/FooterDefault.vue";
+import DefaultLayout from "@/layouts/DefaultLayout.vue";
 
 //image
 import bg0 from "@/assets/img/sportField.jpg";
@@ -57,48 +54,38 @@ watch(
   }
 );
 </script>
-<template>
-  <div
-    class="container position-fixed z-index-sticky"
-    style="
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 100%;
-    "
-  >
-    <div class="row">
-      <div class="col-12">
-        <NavbarDefault :sticky="false" />
-      </div>
-    </div>
-  </div>
 
-  <header class="bg-gradient-dark">
-    <div
-      class="page-header min-vh-75"
-      :style="{ backgroundImage: `url(${bg0})` }"
-    >
-      <span class="mask bg-gradient-dark opacity-6"></span>
-      <div class="container w-100">
-        <div class="row justify-content-center">
-          <div class="col-lg-8 text-center mx-auto my-auto">
-            <h1 class="text-white">臺北市立大學<span class="text-white" id="typed"></span></h1>
-            <div id="typed-strings">
-              <span>學生會</span>
+<template>
+  <DefaultLayout>
+    <template #header>
+      <header class="bg-gradient-dark">
+        <div
+          class="page-header min-vh-75"
+          :style="{ backgroundImage: `url(${bg0})` }"
+        >
+          <span class="mask bg-gradient-dark opacity-6"></span>
+          <div class="container w-100">
+            <div class="row justify-content-center">
+              <div class="col-lg-8 text-center mx-auto my-auto">
+                <h1 class="text-white">臺北市立大學<span class="text-white" id="typed"></span></h1>
+                <div id="typed-strings">
+                  <span>學生會</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </header>
+    </template>
+
+    <template #default>
+      <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+        <Information_13th v-if="term === '13'" />
+        <Information v-else-if="term === '12'" />
+        <!--<AboutTeam />-->
+        <Featuring_13th v-if="term === '13'" />
+        <Featuring v-else-if="term === '12'" />
       </div>
-    </div>
-  </header>
-  <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
-    <Information_13th v-if="term === '13'" />
-    <Information v-else-if="term === '12'" />
-    <!--<AboutTeam />-->
-    <Featuring_13th v-if="term === '13'" />
-    <Featuring v-else-if="term === '12'" />
-  </div>
-  <DefaultFooter />
+    </template>
+  </DefaultLayout>
 </template>
