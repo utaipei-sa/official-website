@@ -1,17 +1,15 @@
 import { createApp } from "vue";
-import { createPinia } from "pinia";
-import App from "./App.vue";
-import router from "./router";
+import App from "@/App.vue";
+import router from "@/router";
 
-// Nucleo Icons
-import "./assets/css/nucleo-icons.css";
-import "./assets/css/nucleo-svg.css";
-
-import materialKit from "./material-kit";
+import "@/styles/main.css";
+import "@/styles/icons/nucleo-icons.css";
+import "@/styles/icons/nucleo-svg.css";
+import "@/styles/vendor/material-kit.scss";
+import "@/utils/material-input.js";
+import "@/utils/ripple-effect.js";
 
 const app = createApp(App);
 
-app.use(createPinia());
 app.use(router);
-app.use(materialKit);
 app.mount("#app");

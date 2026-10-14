@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
-import PresentationView from "../views/Presentation/PresentationView.vue";
-import AboutView from "../views/LandingPages/AboutUs/AboutView.vue";
-import CalendarView from "../views/Activities/CalendarView.vue";
+﻿import { createRouter, createWebHistory } from "vue-router";
+import PresentationView from "@/pages/Home/PresentationView.vue";
+import AboutView from "@/pages/About/AboutView.vue";
+import CalendarView from "@/pages/Activities/CalendarView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
