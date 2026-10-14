@@ -40,6 +40,8 @@ onMounted(() => {
       loop: true,
     });
   }
+
+  term.value = route.query.term || "13"; // 初始化 term 的值，若沒有 query 則預設為 13
 });
 
 onUnmounted(() => {
